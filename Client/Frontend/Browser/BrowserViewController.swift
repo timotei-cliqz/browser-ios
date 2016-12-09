@@ -1708,7 +1708,8 @@ extension BrowserViewController: URLBarDelegate {
         self.navigationController?.pushViewController(tabTrayController, animated: true)
 		self.tabTrayController = tabTrayController
         */
-		self.navigationController?.pushViewController(dashboard, animated: false)
+		let history = ConversationalHistory()
+		self.navigationController?.pushViewController(history, animated: false)
     }
 
     func urlBarDidPressReaderMode(urlBar: URLBarView) {

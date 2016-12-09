@@ -25,11 +25,13 @@ class DashboardViewController: UIViewController, HistoryDelegate, FavoritesDeleg
 
 	weak var delegate: BrowserNavigationDelegate!
 
-	private lazy var historyViewController: HistoryViewController = {
-		let historyViewController = HistoryViewController(profile: self.profile)
-		historyViewController.delegate = self
-		return historyViewController
-	}()
+//	private lazy var historyViewController: HistoryViewController = {
+//		let historyViewController = HistoryViewController(profile: self.profile)
+//		historyViewController.delegate = self
+//		return historyViewController
+//	}()
+
+	private lazy var historyViewController: ConversationalHistory = ConversationalHistory()
 
 	private lazy var favoritesViewController: FavoritesViewController = {
 		let favoritesViewController = FavoritesViewController(profile: self.profile)
@@ -48,7 +50,7 @@ class DashboardViewController: UIViewController, HistoryDelegate, FavoritesDeleg
 		super.init(nibName: nil, bundle: nil)
         
         // load histroy and favorites immediately not lazy to enhance the performance
-        self.historyViewController.loadExtensionWebView()
+//        self.historyViewController.loadExtensionWebView()
         self.favoritesViewController.loadExtensionWebView()
 	}
 

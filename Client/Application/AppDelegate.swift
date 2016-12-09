@@ -198,9 +198,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         log.debug("Done with setting up the application.")
-
+		self.syncHistory(profile)
         return true
     }
+
+	func syncHistory(profile: Profile) {
+//		if let LocalDataStore.objectForKey("historySynced") as
+	}
 
     func applicationWillTerminate(application: UIApplication) {
         log.debug("Application will terminate.")
