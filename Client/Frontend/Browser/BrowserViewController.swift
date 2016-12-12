@@ -50,6 +50,8 @@ class BrowserViewController: UIViewController {
     private(set) var toolbar: TabToolbar?
     //Cliqz: use CliqzSearchViewController instead of FireFox one
     private var searchController: CliqzSearchViewController? //SearchViewController?
+	private var conversationalHistoryController: UINavigationController?
+
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
@@ -907,7 +909,32 @@ class BrowserViewController: UIViewController {
             }
         }
     }
+
     // Cliqz: modified showSearchController to show SearchViewController insead of searchController
+	private func showConversationalHistory() {
+		if let vc = self.conversationalHistoryController {
+			vc.view.hidden = false
+		} else {
+			let history = ConversationalHistory()
+			conversationalHistoryController = UINavigationController(rootViewController: history)
+			history.backButton = self.urlBar.historyBackButton
+			history.delegate = self
+			view.addSubview(conversationalHistoryController!.view)
+			addChildViewController(conversationalHistoryController!)
+			conversationalHistoryController!.view.snp_makeConstraints { make in
+				make.top.equalTo(self.urlBar.snp_bottom)
+				make.left.right.bottom.equalTo(self.view)
+				return
+			}
+		}
+	}
+
+	private func hideConversationalHistory() {
+		if let vc = self.conversationalHistoryController {
+			vc.view.hidden = true
+		}
+	}
+
     private func showSearchController() {
         if searchController == nil {
             searchController = CliqzSearchViewController(profile: self.profile)
@@ -1817,8 +1844,14 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
         searchLoader.query = text
         // Cliqz: always show search controller even if query was empty
-        showSearchController()
-        searchController!.searchQuery = text
+		showConversationalHistory()
+		if text != "" {
+			showSearchController()
+			searchController!.searchQuery = text
+		} else {
+			hideSearchController()
+		}
+
         /*
         if text.isEmpty {
             hideSearchController()
@@ -3914,6 +3947,7 @@ extension BrowserViewController: SearchViewDelegate, BrowserNavigationDelegate {
     }
 
 	func navigateToURL(url: NSURL) {
+		self.hideConversationalHistory()
 		finishEditingAndSubmit(url, visitType: .Link)
 	}
 	

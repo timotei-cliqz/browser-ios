@@ -162,6 +162,7 @@ class URLBarView: UIView {
         return tabsButton
     }()
 
+
     private lazy var progressBar: UIProgressView = {
         let progressBar = UIProgressView()
         progressBar.progressTintColor = URLBarViewUX.ProgressTintColor
@@ -305,7 +306,7 @@ class URLBarView: UIView {
 			make.left.equalTo(self)
 			make.size.equalTo(UIConstants.ToolbarHeight)
 		}
-
+		tabsButton.hidden = true
 		// Cliqz: Commented curveShape constraints because it's removed from view
 //		curveShape.snp_makeConstraints { make in
 //            make.top.left.bottom.equalTo(self)

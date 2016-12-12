@@ -375,9 +375,10 @@ extension CliqzSearchViewController {
 }
 
 extension CliqzSearchViewController: JavaScriptBridgeDelegate {
-    
+
     func didSelectUrl(url: NSURL) {
         if !inSelectionMode {
+			ConversationalHistoryAPI.pushURLAndQuery(url.absoluteString!, query: self.searchQuery!)
             delegate?.didSelectURL(url, searchQuery: self.searchQuery)
         } else {
             inSelectionMode = false

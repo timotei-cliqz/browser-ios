@@ -16,6 +16,13 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	let historyCellID = "HistoryCell"
 
 	var domainsHistory: NSDictionary!
+	var backButton: UIButton! {
+		didSet {
+			backButton.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
+		}
+	}
+	
+	weak var delegate: BrowserNavigationDelegate?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,9 +35,16 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.historyTableView.dataSource = self
 		self.historyTableView.registerClass(HistoryCell.self, forCellReuseIdentifier: historyCellID)
 		self.historyTableView.tableFooterView = UIView()
-		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
+		self.historyTableView.separatorStyle = .SingleLine
+		self.historyTableView.separatorColor = UIColor.darkGrayColor()
+//		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
 		self.loadData()
+		self.backButton.hidden = true
 	}
+
+//	@objc func goBack(sender: UIButton) {
+//		self.navigationController?.popViewControllerAnimated(false)
+//	}
 
 	func uploadHistory() {
 		/*
@@ -57,7 +71,8 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		self.navigationController?.navigationBarHidden = false
+		self.navigationController?.navigationBarHidden = true
+		self.backButton.hidden = true
 	}
 
 	func loadData() {
@@ -97,21 +112,24 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 			cell.titleLabel.text = x.toRelativeTimeString()
 		}
 		cell.logoImageView.image = UIImage(named: "coolLogo")
-		cell.selectionStyle = .None
+		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		cell.accessoryType = .DisclosureIndicator
 		return cell
 	}
 	
 	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return 60
+		return 80
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		let key = self.domainsHistory.allKeys[indexPath.row] as! String
 		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
-		let details = value // value.valueForKey("urls") as! NSDictionary
+		let details = value
 		let vc = ConversationalHistoryDetails()
 		vc.detaildHistory = details
+		vc.delegate = self.delegate
 		self.navigationController?.pushViewController(vc, animated: false)
+		self.backButton.hidden = false
 	}
 	
 	@objc private func goBack() {
@@ -128,13 +146,15 @@ class HistoryCell: UITableViewCell {
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		self.contentView.addSubview(titleLabel)
-		titleLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
-		titleLabel.textColor = UIColor.blackColor()
+		titleLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
+		titleLabel.textColor = UIColor.lightGrayColor()
 		titleLabel.backgroundColor = UIColor.clearColor()
+		titleLabel.textAlignment = .Left
 		self.contentView.addSubview(URLLabel)
-		URLLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
-		URLLabel.textColor = UIColor(rgb: 0x77ABE6)
+		URLLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+		URLLabel.textColor = UIColor.blackColor() //UIColor(rgb: 0x77ABE6)
 		URLLabel.backgroundColor = UIColor.clearColor()
+		URLLabel.textAlignment = .Left
 		self.contentView.addSubview(logoImageView)
 	}
 	
@@ -143,21 +163,23 @@ class HistoryCell: UITableViewCell {
 	}
 
 	override func layoutSubviews() {
+		super.layoutSubviews()
 		self.logoImageView.snp_remakeConstraints { (make) in
-			make.left.top.equalTo(self.contentView).offset(10)
+			make.left.equalTo(self.contentView).offset(10)
+			make.centerY.equalTo(self.contentView)
 			make.height.width.equalTo(40)
 		}
 		self.URLLabel.snp_remakeConstraints { (make) in
-			make.top.equalTo(self.contentView).offset(10)
-			make.left.equalTo(self.logoImageView.snp_right).offset(10)
+			make.top.equalTo(self.contentView).offset(15)
+			make.left.equalTo(self.logoImageView.snp_right).offset(15)
 			make.height.equalTo(20)
-			make.right.equalTo(self.contentView)
+			make.right.equalTo(self.contentView).offset(40)
 		}
 		self.titleLabel.snp_remakeConstraints { (make) in
-			make.top.equalTo(self.URLLabel.snp_bottom)
-			make.left.equalTo(self.logoImageView.snp_right).offset(10)
+			make.top.equalTo(self.URLLabel.snp_bottom).offset(7)
+			make.left.equalTo(self.URLLabel.snp_left).offset(10)
 			make.height.equalTo(20)
-			make.right.equalTo(self.contentView)
+			make.right.equalTo(self.contentView).offset(40)
 		}
 	}
 	

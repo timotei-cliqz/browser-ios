@@ -203,7 +203,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 	func syncHistory(profile: Profile) {
-//		if let LocalDataStore.objectForKey("historySynced") as
+		let historySyncedKey = "historySynced"
+		let isHistorySynced = LocalDataStore.objectForKey(historySyncedKey) as? NSNumber
+		if isHistorySynced == nil || !isHistorySynced!.boolValue {
+			profile.history.getHistoryVisits(100).uponQueue(dispatch_get_main_queue()) { result in
+				if let sites = result.successValue {
+					ConversationalHistoryAPI.pushAllHistory(sites, completionHandler: {
+						(error) in
+						if error == nil {
+							LocalDataStore.setObject(NSNumber(bool: true), forKey: historySyncedKey)
+						}
+					})
+				}
+			}
+		}
 	}
 
     func applicationWillTerminate(application: UIApplication) {

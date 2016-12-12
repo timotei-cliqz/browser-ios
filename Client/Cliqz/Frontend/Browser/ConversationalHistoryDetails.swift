@@ -15,6 +15,8 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	var historyTableView: UITableView!
 	let historyCellID = "HistoryCell"
 	
+	weak var delegate: BrowserNavigationDelegate?
+
 	var detaildHistory: NSDictionary! {
 		didSet {
 			self.urls = detaildHistory.valueForKey("urls") as! NSDictionary
@@ -40,7 +42,7 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		self.navigationController?.navigationBarHidden = false
+		self.navigationController?.navigationBarHidden = true
 	}
 
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,6 +95,14 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 		return header
 	}
 
+	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		let key = self.urls.allKeys[indexPath.row] as! String
+		if let url = NSURL(string: key) {
+			self.navigationController?.popViewControllerAnimated(false)
+			self.delegate?.navigateToURL(url)
+		}
+	}
+	
 	@objc private func goBack() {
 		self.navigationController?.popViewControllerAnimated(false)
 	}
