@@ -1,4 +1,5 @@
-function sendMetaData(uid, url) {
+
+function sendMetaData() {
 	var title = window.document.querySelector("title"),
 	description = window.document.querySelector("meta[name=description]"),
 	ogTitle = window.document.querySelector("meta[property='og:title']"),
@@ -26,9 +27,5 @@ function sendMetaData(uid, url) {
 	canonical: canonical,
 	}
 	
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://hs.cliqz.com/pushMetadata?uid=' + uid + '&url=' + url);
-	xhr.setRequestHeader('content-type', 'application/json');
-	xhr.send(metaData);
-	
+	return metaData;
 }

@@ -2265,7 +2265,7 @@
 		E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = effective_tld_names.dat; path = ../effective_tld_names.dat; sourceTree = "<group>"; };
 		E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStringExtensions.swift; sourceTree = "<group>"; };
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
-		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F84B21BE1A090F8100AAB793 /* TalkToMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkToMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F84B21D91A090F8100AAB793 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
@@ -4423,7 +4423,7 @@
 		F84B21BF1A090F8100AAB793 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F84B21BE1A090F8100AAB793 /* Client.app */,
+				F84B21BE1A090F8100AAB793 /* TalkToMe.app */,
 				F84B21D31A090F8100AAB793 /* ClientTests.xctest */,
 				F84B22491A0920C600AAB793 /* ShareTo.appex */,
 				F84B225C1A09210A00AAB793 /* SendTo.appex */,
@@ -5060,7 +5060,7 @@
 			);
 			name = Client;
 			productName = Client;
-			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
+			productReference = F84B21BE1A090F8100AAB793 /* TalkToMe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F84B21D21A090F8100AAB793 /* ClientTests */ = {
@@ -7440,7 +7440,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.Today;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
@@ -7467,7 +7467,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.Today;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
@@ -7494,7 +7494,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.Today;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_VERSION = 2.3;
@@ -7520,7 +7520,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.Today;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_VERSION = 2.3;
@@ -7546,7 +7546,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.Today;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_VERSION = 2.3;
@@ -7680,9 +7680,9 @@
 					Lookback,
 				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
+				PRODUCT_NAME = TalkToMe;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7722,7 +7722,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ShareTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -7747,7 +7747,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.SendTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -7857,6 +7857,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "Talk To Me";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -7864,11 +7865,11 @@
 					Lookback,
 				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
+				PRODUCT_NAME = TalkToMe;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "CliqzBeta AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = HackDay;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
@@ -7913,7 +7914,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ShareTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
@@ -7939,7 +7940,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.SendTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
@@ -8177,7 +8178,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ViewLater;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
@@ -8202,7 +8203,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ViewLater;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
@@ -8227,7 +8228,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ViewLater;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -8589,9 +8590,9 @@
 					Lookback,
 				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
+				PRODUCT_NAME = TalkToMe;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -8615,7 +8616,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.SendTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -8638,7 +8639,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ShareTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -8663,7 +8664,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ViewLater;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -9084,9 +9085,9 @@
 					Lookback,
 				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DCLIQZ";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
+				PRODUCT_NAME = TalkToMe;
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -9127,7 +9128,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.SendTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -9150,7 +9151,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ShareTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -9175,7 +9176,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ViewLater;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SKIP_INSTALL = YES;
@@ -9531,6 +9532,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "Talk To Me";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -9538,9 +9540,9 @@
 					Lookback,
 				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DCLIQZ -DDEBUG -DBETA";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
+				PRODUCT_NAME = TalkToMe;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
@@ -9582,7 +9584,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.ShareTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
@@ -9609,7 +9611,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cliqz.ios.CliqzBeta.SendTo;
+				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;

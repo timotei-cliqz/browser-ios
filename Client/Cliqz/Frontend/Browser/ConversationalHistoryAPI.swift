@@ -12,12 +12,26 @@ import UIKit
 import Storage
 import Shared
 
+func md5_(string: String) -> String {
+	var digest = [UInt8](count: Int(CC_MD5_DIGEST_LENGTH), repeatedValue: 0)
+	if let data = string.dataUsingEncoding(NSUTF8StringEncoding) {
+		CC_MD5(data.bytes, CC_LONG(data.length), &digest)
+	}
+	
+	var digestHex = ""
+	for index in 0..<Int(CC_MD5_DIGEST_LENGTH) {
+		digestHex += String(format: "%02x", digest[index])
+	}
+	
+	return digestHex
+}
+
 class ConversationalHistoryAPI {
 	
 	static let host = "https://hs.cliqz.com/"
 	static let uniqueID: String = {
 		if let ID = UIDevice().identifierForVendor {
-			return ID.UUIDString
+			return md5_(ID.UUIDString)
 		}
 		return "000"
 	}()
@@ -55,6 +69,15 @@ class ConversationalHistoryAPI {
 	class func pushURLAndQuery(url: String, query: String) {
 		let completeParams = ["queries": [["query": query, "url": url]]]
 		Alamofire.request(.POST, "\(self.host)pushQueries?uid=\(self.uniqueID)", parameters: completeParams, encoding: .JSON, headers: nil).response(completionHandler: { (request, response, data, error) in
+			if error != nil {
+				print("Request is failed: \(error)")
+			}
+		})
+	}
+
+	class func pushMetadata(metadata: [String: AnyObject], url: String) {
+//		let completeParams = ["queries": [["query": query, "url": url]]]
+		Alamofire.request(.POST, "\(self.host)pushMetadata?uid=\(self.uniqueID)&url=\(url)", parameters: metadata, encoding: .JSON, headers: nil).response(completionHandler: { (request, response, data, error) in
 			if error != nil {
 				print("Request is failed: \(error)")
 			}

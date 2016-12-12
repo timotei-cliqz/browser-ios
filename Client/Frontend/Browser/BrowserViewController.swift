@@ -797,6 +797,10 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.view)
             }
         }
+		self.conversationalHistoryController?.view.snp_remakeConstraints(closure: { (make) in
+			make.top.equalTo(self.urlBar.snp_bottom)
+			make.left.right.bottom.equalTo(self.view)
+		})
     }
     
     // Cliqz: modifed showHomePanelController to show Cliqz index page (SearchViewController) instead of FireFox home page
@@ -927,6 +931,9 @@ class BrowserViewController: UIViewController {
 				return
 			}
 		}
+		if let x = self.conversationalHistoryController?.topViewController as? ConversationalHistory {
+			x.loadData()
+		}
 	}
 
 	private func hideConversationalHistory() {
@@ -1007,6 +1014,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func finishEditingAndSubmit(url: NSURL, visitType: VisitType) {
+		self.hideConversationalHistory()
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -2780,6 +2788,12 @@ extension BrowserViewController: WKNavigationDelegate {
 //            postLocationChangeNotificationForTab(tab, navigation: navigation)
             if currentResponseStatusCode < 400 {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
+				webView.evaluateJavaScript("sendMetaData();", completionHandler: { (obj, err) in
+					if let data = obj as? [String: AnyObject] {
+						ConversationalHistoryAPI.pushMetadata(data, url: url.absoluteString!)
+						print("2222 ---- \(obj)")
+					}
+				})
             }
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
@@ -3947,7 +3961,7 @@ extension BrowserViewController: SearchViewDelegate, BrowserNavigationDelegate {
     }
 
 	func navigateToURL(url: NSURL) {
-		self.hideConversationalHistory()
+		//self.hideConversationalHistory()
 		finishEditingAndSubmit(url, visitType: .Link)
 	}
 	
@@ -3960,6 +3974,7 @@ extension BrowserViewController: SearchViewDelegate, BrowserNavigationDelegate {
 	}
 
     private func navigateToUrl(url: NSURL, searchQuery: String?) {
+		self.hideConversationalHistory()
         let query = (searchQuery != nil) ? searchQuery! : ""
         let forwardUrl = NSURL(string: "\(WebServer.sharedInstance.base)/cliqz/trampolineForward.html?url=\(url.absoluteString!.encodeURL())&q=\(query.encodeURL())")
         if let tab = tabManager.selectedTab,

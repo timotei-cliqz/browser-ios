@@ -16,6 +16,8 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	let historyCellID = "HistoryCell"
 
 	var domainsHistory: NSDictionary!
+	var sortedKeys: [String] = [String]()
+
 	var backButton: UIButton! {
 		didSet {
 			backButton.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
@@ -38,31 +40,12 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.historyTableView.separatorStyle = .SingleLine
 		self.historyTableView.separatorColor = UIColor.darkGrayColor()
 //		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
-		self.loadData()
 		self.backButton.hidden = true
 	}
 
 //	@objc func goBack(sender: UIButton) {
 //		self.navigationController?.popViewControllerAnimated(false)
 //	}
-
-	func uploadHistory() {
-		/*
-		self.profile.history.getHistoryVisits(100).uponQueue(dispatch_get_main_queue()) { result in
-			if let sites = result.successValue {
-				var historyResults = [[String: AnyObject]]()
-				for site in sites {
-					var d = [String: AnyObject]()
-					d["id"] = site!.id
-					d["url"] = site!.url
-					d["title"] = site!.title
-					d["timestamp"] = Double(site!.latestVisit!.date) / 1000.0
-					historyResults.append(d)
-				}
-				self.javaScriptBridge.callJSMethod(c, parameter: historyResults.reverse(), completionHandler: nil)
-			}
-		}*/
-	}
 
 	override func viewWillDisappear(animated: Bool) {
 		self.navigationController?.navigationBarHidden = true
@@ -71,13 +54,27 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
+		
 		self.navigationController?.navigationBarHidden = true
 		self.backButton.hidden = true
+		self.loadData()
+
 	}
 
 	func loadData() {
 		ConversationalHistoryAPI.getHistory { (data) in
 			self.domainsHistory = data
+			self.sortedKeys = data.keysSortedByValueUsingComparator({ (a, b) -> NSComparisonResult in
+				if let x = a as? [String: AnyObject],
+					y = b as? [String: AnyObject] {
+					if (x["lastVisitedAt"] as! NSNumber).doubleValue > (y["lastVisitedAt"] as! NSNumber).doubleValue {
+						return NSComparisonResult.OrderedAscending
+					} else {
+						return NSComparisonResult.OrderedDescending
+					}
+				}
+				return NSComparisonResult.OrderedSame
+			}) as! [String]
 			self.historyTableView.reloadData()
 		}
 	}
@@ -104,16 +101,17 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 			let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryCell
-		let key = self.domainsHistory.allKeys[indexPath.row] as! String
+		let key = self.sortedKeys[indexPath.row]
 		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
 		cell.URLLabel.text = key
 		if let timeinterval = value.valueForKey("lastVisitedAt") as? NSNumber {
-			let x = NSDate.fromMicrosecondTimestamp(timeinterval.unsignedLongLongValue)
+			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue)
 			cell.titleLabel.text = x.toRelativeTimeString()
 		}
 		cell.logoImageView.image = UIImage(named: "coolLogo")
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.accessoryType = .DisclosureIndicator
+		cell.selectionStyle = .None
 		return cell
 	}
 	
@@ -122,7 +120,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let key = self.domainsHistory.allKeys[indexPath.row] as! String
+		let key = self.sortedKeys[indexPath.row]
 		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
 		let details = value
 		let vc = ConversationalHistoryDetails()
@@ -167,7 +165,8 @@ class HistoryCell: UITableViewCell {
 		self.logoImageView.snp_remakeConstraints { (make) in
 			make.left.equalTo(self.contentView).offset(10)
 			make.centerY.equalTo(self.contentView)
-			make.height.width.equalTo(40)
+			make.width.equalTo(40)
+			make.height.equalTo(33)
 		}
 		self.URLLabel.snp_remakeConstraints { (make) in
 			make.top.equalTo(self.contentView).offset(15)

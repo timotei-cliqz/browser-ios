@@ -179,7 +179,7 @@ class CliqzWebView: UIWebView {
         modifyLinksScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
 
     }
-    
+	
 	init(frame: CGRect, configuration: WKWebViewConfiguration) {
 		super.init(frame: frame)
 		commonInit()
@@ -351,6 +351,11 @@ class CliqzWebView: UIWebView {
 		
         // built-in userScripts
 		self.configuration.userContentController.addUserScript(CliqzWebView.modifyLinksScript!)
+		let p2 = NSBundle.mainBundle().pathForResource("getMetadata", ofType: "js")!
+		let s2 = try! NSString(contentsOfFile: p2, encoding: NSUTF8StringEncoding) as String
+		let somescript = WKUserScript(source: s2, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+		self.configuration.userContentController.addUserScript(somescript)
+
 	}
 
     // Needed to identify webview in url protocol
