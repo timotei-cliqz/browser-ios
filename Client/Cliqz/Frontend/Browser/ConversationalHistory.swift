@@ -58,7 +58,6 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.navigationController?.navigationBarHidden = true
 		self.backButton.hidden = true
 		self.loadData()
-
 	}
 
 	func loadData() {
@@ -108,7 +107,12 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue)
 			cell.titleLabel.text = x.toRelativeTimeString()
 		}
-		cell.logoImageView.image = UIImage(named: "coolLogo")
+//		cell.logoImageView.image = UIImage(named: "coolLogo")
+		cell.logoImageView.loadLogo(forDomain: key) { (view) in
+			if view != nil {
+				cell.logoImageView.image = UIImage(named: "coolLogo")
+			}
+		}
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.accessoryType = .DisclosureIndicator
 		cell.selectionStyle = .None
@@ -166,7 +170,7 @@ class HistoryCell: UITableViewCell {
 			make.left.equalTo(self.contentView).offset(10)
 			make.centerY.equalTo(self.contentView)
 			make.width.equalTo(40)
-			make.height.equalTo(33)
+			make.height.equalTo(40)
 		}
 		self.URLLabel.snp_remakeConstraints { (make) in
 			make.top.equalTo(self.contentView).offset(15)

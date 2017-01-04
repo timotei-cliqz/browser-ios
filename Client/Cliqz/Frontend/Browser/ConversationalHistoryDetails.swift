@@ -105,9 +105,19 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 			make.left.equalTo(header).offset(15)
 			make.top.equalTo(header).offset(20)
 			make.width.equalTo(40)
-			make.height.equalTo(33)
+			make.height.equalTo(40)
 		}
-		logo.image = UIImage(named: "coolLogo")
+//		logo.image = UIImage(named: "coolLogo")
+		if let url = self.detaildHistory.objectForKey("baseUrl") as? String {
+			logo.loadLogo(forDomain: url) { (view) in
+				if view != nil {
+					logo.image = UIImage(named: "coolLogo")
+				}
+			}
+		} else {
+			logo.image = UIImage(named: "coolLogo")
+		}
+
 		title.snp_remakeConstraints { (make) in
 			make.top.right.bottom.equalTo(header)
 			make.left.equalTo(logo.snp_right).offset(10)

@@ -453,6 +453,7 @@
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F6072461DFED3F70062500E /* getMetadata.js in Resources */ = {isa = PBXBuildFile; fileRef = 4F6072451DFED3F70062500E /* getMetadata.js */; };
 		4F88A6F31D7714D30039775D /* BrowserNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F88A6F21D7714D30039775D /* BrowserNavigationDelegate.swift */; };
+		4F8E74D01E1C086A00E7C590 /* LogoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E74CF1E1C086A00E7C590 /* LogoLoader.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F97573C1AFA6F37006ECC24 /* ReaderViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */; };
 		4F9A7B611D6DDAC6005F02CB /* CliqzExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9A7B601D6DDAC6005F02CB /* CliqzExtensionViewController.swift */; };
@@ -1879,6 +1880,7 @@
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F6072451DFED3F70062500E /* getMetadata.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = getMetadata.js; sourceTree = "<group>"; };
 		4F88A6F21D7714D30039775D /* BrowserNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserNavigationDelegate.swift; sourceTree = "<group>"; };
+		4F8E74CF1E1C086A00E7C590 /* LogoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoLoader.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewUITests.swift; sourceTree = "<group>"; };
 		4F9A7B601D6DDAC6005F02CB /* CliqzExtensionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzExtensionViewController.swift; sourceTree = "<group>"; };
@@ -2706,6 +2708,7 @@
 		1E79DCC31D4FB2C5006BEB4A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4F8E74CF1E1C086A00E7C590 /* LogoLoader.swift */,
 				1E79DCC41D4FB2C5006BEB4A /* SessionState.swift */,
 				4FF239C81D5339EE00EEDE89 /* CliqzUtils.swift */,
 			);
@@ -6276,6 +6279,7 @@
 				1E79DD161D4FB2C5006BEB4A /* LocationManager.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
+				4F8E74D01E1C086A00E7C590 /* LogoLoader.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
