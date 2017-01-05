@@ -38,7 +38,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.historyTableView.registerClass(HistoryCell.self, forCellReuseIdentifier: historyCellID)
 		self.historyTableView.tableFooterView = UIView()
 		self.historyTableView.separatorStyle = .SingleLine
-		self.historyTableView.separatorColor = UIColor.darkGrayColor()
+		self.historyTableView.separatorColor = UIColor.lightGrayColor()
 //		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
 		self.backButton.hidden = true
 	}
@@ -120,7 +120,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 	
 	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return 80
+		return 70
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -158,6 +158,8 @@ class HistoryCell: UITableViewCell {
 		URLLabel.backgroundColor = UIColor.clearColor()
 		URLLabel.textAlignment = .Left
 		self.contentView.addSubview(logoImageView)
+		logoImageView.layer.cornerRadius = 20
+		logoImageView.clipsToBounds = true
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -179,8 +181,8 @@ class HistoryCell: UITableViewCell {
 			make.right.equalTo(self.contentView).offset(40)
 		}
 		self.titleLabel.snp_remakeConstraints { (make) in
-			make.top.equalTo(self.URLLabel.snp_bottom).offset(7)
-			make.left.equalTo(self.URLLabel.snp_left).offset(10)
+			make.top.equalTo(self.URLLabel.snp_bottom).offset(5)
+			make.left.equalTo(self.URLLabel.snp_left)
 			make.height.equalTo(20)
 			make.right.equalTo(self.contentView).offset(40)
 		}

@@ -100,6 +100,8 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 		title.numberOfLines = 0
 		header.addSubview(title)
 		let logo = UIImageView()
+		logo.layer.cornerRadius = 20
+		logo.clipsToBounds = true
 		header.addSubview(logo)
 		logo.snp_remakeConstraints { (make) in
 			make.left.equalTo(header).offset(15)

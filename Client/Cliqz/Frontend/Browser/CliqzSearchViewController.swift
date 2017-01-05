@@ -31,7 +31,8 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
     private var lastQuery: String?
 
 	var webView: WKWebView?
-    
+	var blurryBackgroundView: UIVisualEffectView!
+
     var privateMode = false
     
     var inSelectionMode = false
@@ -81,18 +82,26 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
 		super.viewDidLoad()
 
         let config = ConfigurationManager.sharedInstance.getSharedConfiguration(self)
-
+		if #available(iOS 10, *) {
+			self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Prominent))
+		} else {
+			self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+		}
+		self.view.addSubview(self.blurryBackgroundView)
         self.webView = WKWebView(frame: self.view.bounds, configuration: config)
 		self.webView?.navigationDelegate = self
         self.webView?.scrollView.scrollEnabled = false
         self.view.addSubview(self.webView!)
         
 
-        self.webView!.snp_makeConstraints { make in
-            make.top.equalTo(0)
-            make.bottom.left.right.equalTo(self.view)
+        self.blurryBackgroundView.snp_makeConstraints { make in
+            make.top.bottom.left.right.equalTo(self.view)
         }
-        
+		self.webView!.snp_makeConstraints { make in
+			make.top.left.equalTo(self.view).offset(20)
+			make.bottom.right.equalTo(self.view).offset(-20)
+		}
+
 		self.spinnerView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 		self.view.addSubview(spinnerView)
 		spinnerView.startAnimating()
@@ -125,7 +134,7 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
             self.webView?.evaluateJavaScript(modifiedSource, completionHandler: nil)
         }
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         javaScriptBridge.setDefaultSearchEngine()
