@@ -82,11 +82,7 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
 		super.viewDidLoad()
 
         let config = ConfigurationManager.sharedInstance.getSharedConfiguration(self)
-		if #available(iOS 10, *) {
-			self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Prominent))
-		} else {
-			self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-		}
+		self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
 		self.view.addSubview(self.blurryBackgroundView)
         self.webView = WKWebView(frame: self.view.bounds, configuration: config)
 		self.webView?.navigationDelegate = self
