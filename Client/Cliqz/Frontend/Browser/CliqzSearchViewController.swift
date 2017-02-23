@@ -82,7 +82,7 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
 		super.viewDidLoad()
 
         let config = ConfigurationManager.sharedInstance.getSharedConfiguration(self)
-		self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+		self.blurryBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
 		self.view.addSubview(self.blurryBackgroundView)
         self.webView = WKWebView(frame: self.view.bounds, configuration: config)
 		self.webView?.navigationDelegate = self
@@ -94,8 +94,10 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
             make.top.bottom.left.right.equalTo(self.view)
         }
 		self.webView!.snp_makeConstraints { make in
-			make.top.left.equalTo(self.view).offset(20)
-			make.bottom.right.equalTo(self.view).offset(-20)
+			make.top.equalTo(self.view).offset(20)
+			make.left.equalTo(self.view).offset(30)
+			make.right.equalTo(self.view).offset(-30)
+			make.bottom.equalTo(self.view).offset(-20)
 		}
 
 		self.spinnerView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
@@ -109,7 +111,34 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CliqzSearchViewController.fixViewport), name: UIDeviceOrientationDidChangeNotification, object: UIDevice.currentDevice())
 
+		let backButton = UIButton(type: .Custom)
+		backButton.setImage(UIImage(named:"left_arrow"), forState: .Normal)
+		backButton.addTarget(self, action: #selector(swipeLeft), forControlEvents: .TouchUpInside)
+
+		self.view.addSubview(backButton)
+		backButton.snp_makeConstraints { make in
+			make.left.equalTo(self.view).offset(4)
+			make.centerY.equalTo(self.view)
+		}
+
+		
+		let rightButton = UIButton(type: .Custom)
+		rightButton.setImage(UIImage(named:"right_arrow"), forState: .Normal)
+		rightButton.addTarget(self, action: #selector(swipeRight), forControlEvents: .TouchUpInside)
+		self.view.addSubview(rightButton)
+		rightButton.snp_makeConstraints { make in
+			make.right.equalTo(self.view).offset(-4)
+			make.centerY.equalTo(self.view)
+		}
     }
+
+	@objc private func swipeRight() {
+		self.javaScriptBridge.publishEvent("swipe", parameters: "1")
+	}
+
+	@objc private func swipeLeft() {
+		self.javaScriptBridge.publishEvent("swipe", parameters: "-1")
+	}
 
     func fixViewport() {
         if #available(iOS 9.0, *) {

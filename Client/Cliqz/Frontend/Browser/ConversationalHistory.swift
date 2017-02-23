@@ -18,11 +18,11 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	var domainsHistory: NSDictionary!
 	var sortedKeys: [String] = [String]()
 
-	var backButton: UIButton! {
-		didSet {
-			backButton.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
-		}
-	}
+//	var backButton: UIButton! {
+//		didSet {
+//			backButton.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
+//		}
+//	}
 	
 	weak var delegate: BrowserNavigationDelegate?
 
@@ -40,7 +40,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.historyTableView.separatorStyle = .SingleLine
 		self.historyTableView.separatorColor = UIColor.lightGrayColor()
 //		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
-		self.backButton.hidden = true
+//		self.backButton.hidden = true
 	}
 
 //	@objc func goBack(sender: UIButton) {
@@ -56,7 +56,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		super.viewWillAppear(animated)
 		
 		self.navigationController?.navigationBarHidden = true
-		self.backButton.hidden = true
+//		self.backButton.hidden = true
 		self.loadData()
 	}
 
@@ -107,12 +107,23 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue)
 			cell.titleLabel.text = x.toRelativeTimeString()
 		}
+		cell.tag = indexPath.row
 //		cell.logoImageView.image = UIImage(named: "coolLogo")
-		cell.logoImageView.loadLogo(forDomain: key) { (view) in
-			if view != nil {
-				cell.logoImageView.image = UIImage(named: "coolLogo")
+		LogoLoader.loadLogoImageOrFakeLogo(key, completed: { (image, fakeLogo, error) in
+			if cell.tag == indexPath.row {
+				if image != nil {
+					cell.logoImageView.image = image
+				} else {
+					cell.logoImageView.image = UIImage(named: "coolLogo")
+				}
 			}
-		}
+		})
+
+//		cell.logoImageView.loadLogo(forDomain: key) { (view) in
+//			if view != nil {
+//				cell.logoImageView.image = UIImage(named: "coolLogo")
+//			}
+//		}
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.accessoryType = .DisclosureIndicator
 		cell.selectionStyle = .None
@@ -131,7 +142,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		vc.detaildHistory = details
 		vc.delegate = self.delegate
 		self.navigationController?.pushViewController(vc, animated: false)
-		self.backButton.hidden = false
+//		self.backButton.hidden = false
 	}
 	
 	@objc private func goBack() {

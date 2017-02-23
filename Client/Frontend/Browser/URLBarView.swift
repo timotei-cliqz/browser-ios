@@ -383,7 +383,8 @@ class URLBarView: UIView {
                 make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self)
                 */
-				make.leading.equalTo(self.tabsButton.snp_trailing)
+//				make.leading.equalTo(self.tabsButton.snp_trailing)
+				make.leading.equalTo(self).offset(-URLBarViewUX.URLBarCurveOffsetLeft)
                 make.trailing.equalTo(self).offset(URLBarViewUX.URLBarCurveOffsetLeft)
                 make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self)
@@ -407,7 +408,9 @@ class URLBarView: UIView {
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                     make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
                     */
-					make.leading.equalTo(self.tabsButton.snp_trailing)
+//					make.leading.equalTo(self.tabsButton.snp_trailing)
+					make.leading.equalTo(self).offset(-URLBarViewUX.URLBarCurveOffsetLeft)
+
                 }
                 make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self)

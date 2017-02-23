@@ -905,7 +905,7 @@ class BrowserViewController: UIViewController {
                 // Cliqz: always set showInline to true to show the bottom toolbar
 //                let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
                 let showInline = true
-                showHomePanelController(inline: showInline)
+//                showHomePanelController(inline: showInline)
 				self.urlBar.showAntitrackingButton(false)
             } else {
                 hideHomePanelController()
@@ -921,7 +921,7 @@ class BrowserViewController: UIViewController {
 		} else {
 			let history = ConversationalHistory()
 			conversationalHistoryController = UINavigationController(rootViewController: history)
-			history.backButton = self.urlBar.historyBackButton
+//			history.backButton = self.urlBar.historyBackButton
 			history.delegate = self
 			view.addSubview(conversationalHistoryController!.view)
 			addChildViewController(conversationalHistoryController!)

@@ -88,18 +88,18 @@ class CliqzURLBarView: URLBarView {
 		self.antitrackingButton.addTarget(self, action: #selector(antitrackingButtonPressed), forControlEvents: .TouchUpInside)
 		self.antitrackingButton.hidden = true
 		addSubview(self.antitrackingButton)
-		addSubview(self.historyBackButton)
+//		addSubview(self.historyBackButton)
 		antitrackingButton.snp_makeConstraints { make in
 			make.centerY.equalTo(self.locationContainer)
 			make.leading.equalTo(self.locationContainer.snp_trailing)
 			make.size.equalTo(self.antitrackingButtonSize)
 		}
 		
-		historyBackButton.snp_makeConstraints { make in
-			make.centerY.equalTo(self.locationContainer)
-			make.left.equalTo(self)
-			make.size.equalTo(UIConstants.ToolbarHeight)
-		}
+//		historyBackButton.snp_makeConstraints { make in
+//			make.centerY.equalTo(self.locationContainer)
+//			make.left.equalTo(self)
+//			make.size.equalTo(UIConstants.ToolbarHeight)
+//		}
 
 	}
 	
