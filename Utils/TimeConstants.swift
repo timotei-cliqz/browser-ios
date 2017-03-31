@@ -45,7 +45,7 @@ extension NSDate {
         let components = NSCalendar.currentCalendar().components(units,
             fromDate: self,
             toDate: now,
-            options: [])
+            options: [.SearchBackwards])
         
         if components.year > 0 {
             return String(format: NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
@@ -70,6 +70,12 @@ extension NSDate {
         if components.day > 1 {
             return String(format: NSLocalizedString("this week", comment: "Relative date for date in past week."), String(components.day))
         }
+		
+		if components.hour > 1 {
+//			let absoluteTime = NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle)
+			let format = NSLocalizedString("%@ hours ago", comment: "Relative date for date older than a minute.")
+			return String(format: format, String(components.hour))
+		}
 
         if components.hour > 0 || components.minute > 0 {
             let absoluteTime = NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle)

@@ -105,14 +105,15 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 		header.addSubview(backBtn)
 		backBtn.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
 		backBtn.snp_makeConstraints { (make) in
-			make.left.top.equalTo(header)
+			make.top.equalTo(header)
+			make.left.equalTo(header).offset(5)
 		}
 		let title = UILabel()
 		title.textAlignment = .Center
 		title.numberOfLines = 0
 		title.font = UIFont.boldSystemFontOfSize(10)
 		header.addSubview(title)
-		let logo = UIImageView()
+		let logo = UIButton(type: .Custom)
 		logo.layer.cornerRadius = 15
 		logo.clipsToBounds = true
 		header.addSubview(logo)
@@ -122,22 +123,18 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 			make.width.equalTo(30)
 			make.height.equalTo(30)
 		}
+		logo.addTarget(self, action: #selector(logoPressed), forControlEvents: .TouchUpInside)
 //		logo.image = UIImage(named: "coolLogo")
 		if let url = self.detaildHistory.objectForKey("baseUrl") as? String {
 			LogoLoader.loadLogoImageOrFakeLogo(url, completed: { (image, fakeLogo, error) in
 				if image != nil {
-					logo.image = image
+					logo.setImage(image, forState: .Normal)
 				} else {
-					logo.image = UIImage(named: "coolLogo")
+					logo.setImage(UIImage(named: "coolLogo"), forState: .Normal)
 				}
 			})
-//			logo.loadLogo(forDomain: url) { (view) in
-//				if view != nil {
-//					logo.image = UIImage(named: "coolLogo")
-//				}
-//			}
 		} else {
-			logo.image = UIImage(named: "coolLogo")
+			logo.setImage(UIImage(named: "coolLogo"), forState: .Normal)
 		}
 
 		title.snp_remakeConstraints { (make) in
@@ -170,6 +167,13 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	
 	@objc private func goBack() {
 		self.navigationController?.popViewControllerAnimated(false)
+	}
+	
+	@objc private func logoPressed() {
+		if let baseURL = self.detaildHistory.valueForKey("baseUrl") as? String, let url = NSURL(string: baseURL)  {			self.navigationController?.popViewControllerAnimated(false)
+			self.delegate?.navigateToURL(url)
+		}
+
 	}
 }
 

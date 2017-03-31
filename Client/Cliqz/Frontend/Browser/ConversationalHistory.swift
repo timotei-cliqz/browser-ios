@@ -9,6 +9,7 @@
 import Foundation
 import SnapKit
 import Alamofire
+import Shared
 
 class ConversationalHistory: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -18,12 +19,6 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	var domainsHistory: NSDictionary!
 	var sortedKeys: [String] = [String]()
 
-//	var backButton: UIButton! {
-//		didSet {
-//			backButton.addTarget(self, action: #selector(goBack), forControlEvents: .TouchUpInside)
-//		}
-//	}
-	
 	weak var delegate: BrowserNavigationDelegate?
 
 	override func viewDidLoad() {
@@ -39,13 +34,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		self.historyTableView.tableFooterView = UIView()
 		self.historyTableView.separatorStyle = .SingleLine
 		self.historyTableView.separatorColor = UIColor.lightGrayColor()
-//		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cliqzBack"), style: .Plain, target: self, action: #selector(goBack))
-//		self.backButton.hidden = true
 	}
-
-//	@objc func goBack(sender: UIButton) {
-//		self.navigationController?.popViewControllerAnimated(false)
-//	}
 
 	override func viewWillDisappear(animated: Bool) {
 		self.navigationController?.navigationBarHidden = true
@@ -99,31 +88,30 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-			let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryCell
+		let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryCell
+		cell.delegate = self
 		let key = self.sortedKeys[indexPath.row]
 		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
-		cell.URLLabel.text = key
+		if let host = value.valueForKey("host") as? String {
+			cell.URLLabel.text = host
+		} else {
+			cell.URLLabel.text = key
+		}
 		if let timeinterval = value.valueForKey("lastVisitedAt") as? NSNumber {
 			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue)
 			cell.titleLabel.text = x.toRelativeTimeString()
 		}
 		cell.tag = indexPath.row
-//		cell.logoImageView.image = UIImage(named: "coolLogo")
 		LogoLoader.loadLogoImageOrFakeLogo(key, completed: { (image, fakeLogo, error) in
 			if cell.tag == indexPath.row {
 				if image != nil {
-					cell.logoImageView.image = image
+					cell.logoButton.setImage(image, forState: .Normal)
 				} else {
-					cell.logoImageView.image = UIImage(named: "coolLogo")
+					cell.logoButton.setImage(UIImage(named: "coolLogo"), forState: .Normal)
 				}
 			}
 		})
 
-//		cell.logoImageView.loadLogo(forDomain: key) { (view) in
-//			if view != nil {
-//				cell.logoImageView.image = UIImage(named: "coolLogo")
-//			}
-//		}
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.accessoryType = .DisclosureIndicator
 		cell.selectionStyle = .None
@@ -142,7 +130,6 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		vc.detaildHistory = details
 		vc.delegate = self.delegate
 		self.navigationController?.pushViewController(vc, animated: false)
-//		self.backButton.hidden = false
 	}
 	
 	@objc private func goBack() {
@@ -151,10 +138,41 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 
 }
 
+extension ConversationalHistory: HistoryActionDelegate {
+	func didSelectLogo(atIndex index: Int) {
+		let key = self.sortedKeys[index]
+		if let value = self.domainsHistory.valueForKey(key) as? NSDictionary,
+			baseURL = value.valueForKey("baseUrl") as? String,
+			url = NSURL(string: baseURL) {
+			self.delegate?.navigateToURL(url)
+		}
+	}
+}
+
+//extension ConversationalHistory: KeyboardHelperDelegate {
+//	func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+//		updateViewConstraints()
+//		
+//	}
+//	
+//	func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+//		updateViewConstraints()
+//	}
+//	
+//	func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+//	}
+//}
+
+protocol HistoryActionDelegate: class {
+	func didSelectLogo(atIndex index: Int)
+}
+
 class HistoryCell: UITableViewCell {
 	let titleLabel = UILabel()
 	let URLLabel = UILabel()
-	let logoImageView = UIImageView()
+	let logoButton = UIButton() //UIImageView()
+
+	weak var delegate: HistoryActionDelegate?
 
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -168,9 +186,10 @@ class HistoryCell: UITableViewCell {
 		URLLabel.textColor = UIColor.blackColor() //UIColor(rgb: 0x77ABE6)
 		URLLabel.backgroundColor = UIColor.clearColor()
 		URLLabel.textAlignment = .Left
-		self.contentView.addSubview(logoImageView)
-		logoImageView.layer.cornerRadius = 20
-		logoImageView.clipsToBounds = true
+		self.contentView.addSubview(logoButton)
+		logoButton.layer.cornerRadius = 20
+		logoButton.clipsToBounds = true
+		self.logoButton.addTarget(self, action: #selector(logoPressed), forControlEvents: .TouchUpInside)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -179,7 +198,7 @@ class HistoryCell: UITableViewCell {
 
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		self.logoImageView.snp_remakeConstraints { (make) in
+		self.logoButton.snp_remakeConstraints { (make) in
 			make.left.equalTo(self.contentView).offset(10)
 			make.centerY.equalTo(self.contentView)
 			make.width.equalTo(40)
@@ -187,7 +206,7 @@ class HistoryCell: UITableViewCell {
 		}
 		self.URLLabel.snp_remakeConstraints { (make) in
 			make.top.equalTo(self.contentView).offset(15)
-			make.left.equalTo(self.logoImageView.snp_right).offset(15)
+			make.left.equalTo(self.logoButton.snp_right).offset(15)
 			make.height.equalTo(20)
 			make.right.equalTo(self.contentView).offset(40)
 		}
@@ -197,6 +216,10 @@ class HistoryCell: UITableViewCell {
 			make.height.equalTo(20)
 			make.right.equalTo(self.contentView).offset(40)
 		}
+	}
+	
+	@objc private func logoPressed() {
+		self.delegate?.didSelectLogo(atIndex: self.tag)
 	}
 	
 }

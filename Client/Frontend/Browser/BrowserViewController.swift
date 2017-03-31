@@ -799,10 +799,15 @@ class BrowserViewController: UIViewController {
         }
 		self.conversationalHistoryController?.view.snp_remakeConstraints(closure: { (make) in
 			make.top.equalTo(self.urlBar.snp_bottom)
-			make.left.right.bottom.equalTo(self.view)
+			make.left.right.equalTo(self.view)
+			if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view) where keyboardHeight > 0 {
+				make.bottom.equalTo(self.view).offset(-keyboardHeight)
+			} else {
+				make.bottom.equalTo(self.view)
+			}
 		})
     }
-    
+	
     // Cliqz: modifed showHomePanelController to show Cliqz index page (SearchViewController) instead of FireFox home page
     private func showHomePanelController(inline inline: Bool) {
         log.debug("BVC showHomePanelController.")
@@ -927,7 +932,12 @@ class BrowserViewController: UIViewController {
 			addChildViewController(conversationalHistoryController!)
 			conversationalHistoryController!.view.snp_makeConstraints { make in
 				make.top.equalTo(self.urlBar.snp_bottom)
-				make.left.right.bottom.equalTo(self.view)
+				make.left.right.equalTo(self.view)
+				if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view) where keyboardHeight > 0 {
+					make.bottom.equalTo(self.view).offset(-keyboardHeight)
+				} else {
+					make.bottom.equalTo(self.view)
+				}
 				return
 			}
 		}
@@ -3961,7 +3971,6 @@ extension BrowserViewController: SearchViewDelegate, BrowserNavigationDelegate {
     }
 
 	func navigateToURL(url: NSURL) {
-		//self.hideConversationalHistory()
 		finishEditingAndSubmit(url, visitType: .Link)
 	}
 	

@@ -29,13 +29,13 @@ func md5_(string: String) -> String {
 
 class ConversationalHistoryAPI {
 	
-	static let host = "https://hs.cliqz.com/"
-	static let uniqueID: String = {
-		if let ID = UIDevice().identifierForVendor {
-			return md5_(ID.UUIDString)
-		}
-		return "000"
-	}()
+//	static let host = "https://hs.cliqz.com/"
+//	static let uniqueID: String = {
+//		if let ID = UIDevice().identifierForVendor {
+//			return md5_(ID.UUIDString)
+//		}
+//		return "000"
+//	}()
 
 	class func pushHistoryItem(visit: SiteVisit) {
         Engine.sharedInstance.getHistory().addHistoryItem(self.generateParamsForHistoryItem(visit.site.url, title: visit.site.title, visitedDate: visit.date))

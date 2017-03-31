@@ -284,6 +284,7 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         menuButton.accessibilityIdentifier = "TabToolbar.homePageButton"
         // Cliqz: Add new Tab button
         newTabButton = UIButton()
+		newTabButton.enabled = false
         newTabButton.accessibilityIdentifier = "TabToolbar.newTabButton"
         
         if AppConstants.MOZ_MENU {

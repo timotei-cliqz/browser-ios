@@ -203,7 +203,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 	func syncHistory(profile: Profile) {
-		let historySyncedKey = "historySyncedLocal"
+		let historySyncedKey = "newHistorySyncedLocal"
 		let isHistorySynced = LocalDataStore.objectForKey(historySyncedKey) as? NSNumber
 		if isHistorySynced == nil || !isHistorySynced!.boolValue {
 			profile.history.getHistoryVisits(100).uponQueue(dispatch_get_main_queue()) { result in
