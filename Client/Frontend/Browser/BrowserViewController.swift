@@ -829,7 +829,7 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.view)
             }
         }
-		self.conversationalHistoryController?.view.snp_remakeConstraints(closure: { (make) in
+		self.conversationalContainer.view.snp_remakeConstraints(closure: { (make) in
 			make.top.equalTo(self.urlBar.snp_bottom)
 			make.left.right.equalTo(self.view)
 			if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view) where keyboardHeight > 0 {
@@ -3755,7 +3755,6 @@ extension BrowserViewController {
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
 
         UIView.animateWithDuration(state.animationDuration) {
             UIView.setAnimationCurve(state.animationCurve)
@@ -3775,6 +3774,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        updateViewConstraints()
     }
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {

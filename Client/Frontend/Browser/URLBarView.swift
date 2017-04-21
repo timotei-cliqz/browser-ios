@@ -733,7 +733,7 @@ class URLBarView: UIView {
     }
 
     func SELdidClickCancel() {
-        leaveOverlayMode(didCancel: true)
+        //leaveOverlayMode(didCancel: true)
     }
 
     func SELtappedScrollToTopArea() {

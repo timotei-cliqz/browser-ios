@@ -75,7 +75,9 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryCell
 		cell.delegate = self
         cell.tag = indexPath.row
-    
+        
+        cell.logoButton.setImage(UIImage.fromColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), size: CGSize(width: 60, height: 60)), forState: .Normal)
+        
         cell.URLLabel.text   = dataSource.urlLabelText(indexPath)
         cell.titleLabel.text = dataSource.titleLabelText(indexPath)
         dataSource.image(indexPath) { (result) in
@@ -191,4 +193,17 @@ class HistoryCell: UITableViewCell {
 		self.delegate?.didSelectLogo(atIndex: self.tag)
 	}
 	
+}
+
+extension UIImage {
+    static func fromColor(color: UIColor, size: CGSize) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context!, color.CGColor)
+        CGContextFillRect(context!, rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
+    }
 }

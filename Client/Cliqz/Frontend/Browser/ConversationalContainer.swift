@@ -64,7 +64,8 @@ final class ConversationalContainer: UIViewController {
             self.view.addSubview(searchController!.view)
             self.addChildViewController(searchController!)
             searchController!.view.snp_makeConstraints(closure: { (make) in
-                make.top.bottom.left.right.equalTo(self.view)
+                make.top.left.right.equalTo(self.view)
+                make.height.equalTo(UIScreen.mainScreen().bounds.height)
             })
         }
     }
@@ -109,7 +110,7 @@ final class ConversationalContainer: UIViewController {
         searchController?.didMoveToParentViewController(self)
         
         searchController?.searchQuery = text
-        searchController?.sendUrlBarFocusEvent()
+        //searchController?.sendUrlBarFocusEvent()
         
         resetNavigationSteps()
     }
