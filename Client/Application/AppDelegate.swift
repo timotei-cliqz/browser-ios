@@ -302,6 +302,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
         // Configure AntiTracking Module
         AntiTrackingModule.sharedInstance.initModule()
+        
+        //setUp News
+        NewsDataSource.sharedInstance
 
         log.debug("Done with applicationDidFinishLaunching.")
 

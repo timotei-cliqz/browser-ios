@@ -11,13 +11,24 @@ import SnapKit
 import Alamofire
 import Shared
 
+protocol HistoryProtocol: class{
+    func numberOfCells() -> Int
+    func urlLabelText(indexPath:NSIndexPath) -> String
+    func titleLabelText(indexPath:NSIndexPath) -> String
+    func timeLabelText(indexPath:NSIndexPath) -> String
+    func baseUrl(indexPath:NSIndexPath) -> String
+    func image(indexPath:NSIndexPath, completionBlock:(result:UIImage) -> Void)
+}
+
 class ConversationalHistory: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
 	var historyTableView: UITableView!
 	let historyCellID = "HistoryCell"
-
-	var domainsHistory: NSDictionary!
-	var sortedKeys: [String] = [String]()
+    
+    var dataSource: HistoryDataSource = HistoryDataSource()
+    var first_appear:Bool = true
+    
+    var didPressCell:(tableView: UITableView, indexPath:NSIndexPath) -> () = { _ in }
 
 	weak var delegate: BrowserNavigationDelegate?
 
@@ -37,80 +48,41 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 
 	override func viewWillDisappear(animated: Bool) {
+        //dataSource.clean()
 		self.navigationController?.navigationBarHidden = true
 		super.viewWillDisappear(animated)
 	}
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		
 		self.navigationController?.navigationBarHidden = true
 //		self.backButton.hidden = true
-		self.loadData()
-	}
-
-	func loadData() {
-		ConversationalHistoryAPI.getHistory { (data) in
-			self.domainsHistory = data.valueForKey("domains") as? NSDictionary
-			self.sortedKeys = self.domainsHistory.keysSortedByValueUsingComparator({ (a, b) -> NSComparisonResult in
-				if let x = a as? [String: AnyObject],
-					y = b as? [String: AnyObject] {
-					if (x["lastVisitedAt"] as! NSNumber).doubleValue > (y["lastVisitedAt"] as! NSNumber).doubleValue {
-						return NSComparisonResult.OrderedAscending
-					} else {
-						return NSComparisonResult.OrderedDescending
-					}
-				}
-				return NSComparisonResult.OrderedSame
-			}) as! [String]
+        self.loadData()        
+    }
+    
+    func loadData() {
+        dataSource.loadData { (ready) in
             self.historyTableView.reloadData()
-		}
-	}
-
-	func loadDummyData() {
-		if let path = NSBundle.mainBundle().pathForResource("getHistory", ofType: "js") {
-			do {
-				let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
-				let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-				self.domainsHistory = jsonObj.valueForKey("domains") as? NSDictionary
-			} catch let error as NSError {
-				print(error.localizedDescription)
-			}
-			
-		}
-	}
+        }
+    }
 
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if let data = self.domainsHistory {
-			return data.allKeys.count
-		}
-		return 0
+		return dataSource.numberOfCells()
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
 		let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryCell
 		cell.delegate = self
-		let key = self.sortedKeys[indexPath.row]
-		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
-		if let host = value.valueForKey("host") as? String {
-			cell.URLLabel.text = host
-		} else {
-			cell.URLLabel.text = key
-		}
-		if let timeinterval = value.valueForKey("lastVisitedAt") as? NSNumber {
-			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue / 1000)
-			cell.titleLabel.text = x.toRelativeTimeString()
-		}
-		cell.tag = indexPath.row
-		LogoLoader.loadLogoImageOrFakeLogo(key, completed: { (image, fakeLogo, error) in
-			if cell.tag == indexPath.row {
-				if image != nil {
-					cell.logoButton.setImage(image, forState: .Normal)
-				} else {
-					cell.logoButton.setImage(UIImage(named: "coolLogo"), forState: .Normal)
-				}
-			}
-		})
+        cell.tag = indexPath.row
+    
+        cell.URLLabel.text   = dataSource.urlLabelText(indexPath)
+        cell.titleLabel.text = dataSource.titleLabelText(indexPath)
+        dataSource.image(indexPath) { (result) in
+            if cell.tag == indexPath.row{
+                cell.logoButton.setImage(result, forState: .Normal)
+            }
+        }
 
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.accessoryType = .DisclosureIndicator
@@ -123,12 +95,24 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let key = self.sortedKeys[indexPath.row]
-		let value = self.domainsHistory.valueForKey(key) as! NSDictionary
-		let details = value
-		let vc = ConversationalHistoryDetails()
-		vc.detaildHistory = details
-		vc.delegate = self.delegate
+        
+        let vc = ConversationalHistoryDetails()
+        vc.delegate = self.delegate
+        
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! HistoryCell
+        if indexPath.row == 0 {
+            //news
+            if NewsDataSource.sharedInstance.ready{
+                let datasource = CliqzNewsDetailsDataSource(image:cell.logoButton.imageView?.image, articles: NewsDataSource.sharedInstance.articles)
+                vc.dataSource = datasource
+            }
+        }
+        else{
+            let key = dataSource.domains[indexPath.row]
+            let value = dataSource.domainsInfo.valueForKey(key) as! NSDictionary
+            vc.dataSource = CliqzHistoryDetailsDataSource(images: cell.logoButton.imageView?.image, visits: value.valueForKey("visits") as? NSArray ?? NSArray(), baseUrl: value.valueForKey("baseUrl") as? String ?? "")
+        }
+        
 		self.navigationController?.pushViewController(vc, animated: false)
 	}
 	
@@ -140,12 +124,17 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 
 extension ConversationalHistory: HistoryActionDelegate {
 	func didSelectLogo(atIndex index: Int) {
-		let key = self.sortedKeys[index]
-		if let value = self.domainsHistory.valueForKey(key) as? NSDictionary,
-			baseURL = value.valueForKey("baseUrl") as? String,
-			url = NSURL(string: baseURL) {
-			self.delegate?.navigateToURL(url)
-		}
+        if index == 0{
+            //pressed on the cliqz news logo
+        }
+        else{
+            let key = dataSource.domains[index]
+            if let value = dataSource.domainsInfo.valueForKey(key) as? NSDictionary,
+                baseURL = value.valueForKey("baseUrl") as? String,
+                url = NSURL(string: baseURL) {
+                self.delegate?.navigateToURL(url)
+            }
+        }
 	}
 }
 

@@ -9,35 +9,25 @@
 import Foundation
 import UIKit
 import SnapKit
+import Alamofire
+
+protocol HistoryDetailsProtocol: class {
+    func urlLabelText(indexPath:NSIndexPath) -> String
+    func titleLabelText(indexPath:NSIndexPath) -> String
+    func timeLabelText(indexPath:NSIndexPath) -> String
+    func baseUrl() -> String
+    func numberOfCells() -> Int
+    func image() -> UIImage?
+}
 
 class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
 	var historyTableView: UITableView!
 	let historyCellID = "HistoryCell"
 	var sortedURLs = [String]()
+    var dataSource: HistoryDetailsProtocol? = nil
 
 	weak var delegate: BrowserNavigationDelegate?
-
-	var detaildHistory: NSDictionary! {
-		didSet {
-			if let d = detaildHistory.valueForKey("visits") as? NSDictionary {
-				 self.sortedURLs = d.keysSortedByValueUsingComparator({ (a, b) -> NSComparisonResult in
-					if let x = a as? [String: AnyObject],
-							y = b as? [String: AnyObject] {
-						if let sort1 = x["lastVisitedAt"] as? NSNumber,
-							sort2 = y["lastVisitedAt"] as? NSNumber {
-							if sort1.doubleValue > sort2.doubleValue {
-								return NSComparisonResult.OrderedAscending
-							}
-							return NSComparisonResult.OrderedDescending
-						}
-					}
-					return NSComparisonResult.OrderedSame
-				}) as! [String]
-			}
-			self.urls = detaildHistory.valueForKey("visits") as? NSArray
-		}
-	}
 	
 	private var urls: NSArray!
 
@@ -54,8 +44,6 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 		self.historyTableView.separatorStyle = .None
 
 //		self.historyTableView.tableFooterView = UIView()
-
-
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -64,24 +52,15 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	}
 
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if let data = self.urls {
-			return data.count
-		}
-		return 0
+		return dataSource?.numberOfCells() ?? 0
 	}
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryDetailCell
-//		let key = self.sortedURLs[indexPath.row]
-		let value = self.urls[indexPath.row] as! NSDictionary
-		cell.URLLabel.text = value.valueForKey("url") as? String
-		if let timeinterval = value.valueForKey("lastVisitedAt") as? NSNumber {
-			let x = NSDate(timeIntervalSince1970: timeinterval.doubleValue / 1000)
-			cell.timeLabel.text = x.toRelativeTimeString()
-		}
-		if let title = value.valueForKey("title") as? String {
-			cell.titleLabel.text = title
-		}
+        
+        cell.URLLabel.text = dataSource?.urlLabelText(indexPath)
+        cell.titleLabel.text = dataSource?.titleLabelText(indexPath)
+        cell.timeLabel.text = dataSource?.timeLabelText(indexPath)
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.selectionStyle = .None
 
@@ -124,27 +103,18 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 			make.height.equalTo(30)
 		}
 		logo.addTarget(self, action: #selector(logoPressed), forControlEvents: .TouchUpInside)
-//		logo.image = UIImage(named: "coolLogo")
-		if let url = self.detaildHistory.objectForKey("baseUrl") as? String {
-			LogoLoader.loadLogoImageOrFakeLogo(url, completed: { (image, fakeLogo, error) in
-				if image != nil {
-					logo.setImage(image, forState: .Normal)
-				} else {
-					logo.setImage(UIImage(named: "coolLogo"), forState: .Normal)
-				}
-			})
-		} else {
-			logo.setImage(UIImage(named: "coolLogo"), forState: .Normal)
-		}
+        logo.setImage(dataSource?.image() ?? UIImage(named: "coolLogo"), forState: .Normal)
 
 		title.snp_remakeConstraints { (make) in
 			make.top.equalTo(logo.snp_bottom)
 			make.left.right.equalTo(header)
 			make.height.equalTo(20)
 		}
-		if let baseURL = self.detaildHistory.valueForKey("baseUrl") as? String { //,titleTxt = snippet.valueForKey("title") as? String {
-			title.text = baseURL
+        
+		if let baseURL = dataSource?.baseUrl() {
+            title.text = baseURL
 		}
+        
 		let sep = UIView()
 		sep.backgroundColor = UIColor.lightGrayColor()
 		header.addSubview(sep)
@@ -158,8 +128,7 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let key = self.urls[indexPath.row]
-		if let urlString = key.objectForKey("url") as? String, let url = NSURL(string: urlString) {
+		if let urlString = dataSource?.urlLabelText(indexPath), let url = NSURL(string: urlString) {
 			self.navigationController?.popViewControllerAnimated(false)
 			self.delegate?.navigateToURL(url)
 		}
@@ -170,7 +139,8 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	}
 	
 	@objc private func logoPressed() {
-		if let baseURL = self.detaildHistory.valueForKey("baseUrl") as? String, let url = NSURL(string: baseURL)  {			self.navigationController?.popViewControllerAnimated(false)
+		if let baseURL = dataSource?.baseUrl(), let url = NSURL(string: baseURL) {
+            self.navigationController?.popViewControllerAnimated(false)
 			self.delegate?.navigateToURL(url)
 		}
 
@@ -252,5 +222,5 @@ class HistoryDetailCell: UITableViewCell {
 		}
 
 	}
-	
 }
+

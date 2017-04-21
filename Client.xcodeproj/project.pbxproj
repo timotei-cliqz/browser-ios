@@ -592,6 +592,10 @@
 		A91528D21D0E637600CD0425 /* NoImageModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A91528D11D0E637600CD0425 /* NoImageModeHelper.js */; };
 		A93067D91D0FE15E00C49C6E /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A93067D81D0FE15E00C49C6E /* NightModeHelper.js */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		AFF56CFC1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */; };
+		AFF56CFE1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */; };
+		AFF56D001EA8F7C30025E354 /* HistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */; };
+		AFFD63DA1EA77B88009340ED /* NewsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD63D91EA77B88009340ED /* NewsDataSource.swift */; };
 		B354B5BC1E5C5A06001B38A1 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B354B5BB1E5C5A06001B38A1 /* Engine.swift */; };
 		B354B5BE1E5C5AC8001B38A1 /* WebRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B354B5BD1E5C5AC8001B38A1 /* WebRequest.swift */; };
 		B354B5DE1E5C7096001B38A1 /* WebRequestBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B354B5DD1E5C7096001B38A1 /* WebRequestBridge.m */; };
@@ -1961,6 +1965,10 @@
 		A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHelper.swift; sourceTree = "<group>"; };
 		AF7BD6E91E4B2EC100E24A1A /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Client/Application/LaunchScreen.xib; sourceTree = "<group>"; };
 		AF7BD6EB1E4B2FAF00E24A1A /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Client/Assets/Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzHistoryDetailsDataSource.swift; sourceTree = "<group>"; };
+		AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzNewsDetailsDataSource.swift; sourceTree = "<group>"; };
+		AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryDataSource.swift; sourceTree = "<group>"; };
+		AFFD63D91EA77B88009340ED /* NewsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsDataSource.swift; sourceTree = "<group>"; };
 		B354B5BB1E5C5A06001B38A1 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Engine.swift; path = JSEngine/Engine.swift; sourceTree = "<group>"; };
 		B354B5BD1E5C5AC8001B38A1 /* WebRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebRequest.swift; path = JSEngine/WebRequest.swift; sourceTree = "<group>"; };
 		B354B5DD1E5C7096001B38A1 /* WebRequestBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebRequestBridge.m; path = JSEngine/WebRequestBridge.m; sourceTree = "<group>"; };
@@ -3702,6 +3710,10 @@
 				4FBAF3531DF970A400F4CEEE /* ConversationalHistory.swift */,
 				4FBAF3641DF995F000F4CEEE /* ConversationalHistoryDetails.swift */,
 				4FBAF3681DF9C72A00F4CEEE /* ConversationalHistoryAPI.swift */,
+				AFFD63D91EA77B88009340ED /* NewsDataSource.swift */,
+				AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */,
+				AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */,
+				AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */,
 			);
 			name = ConversationalHistory;
 			sourceTree = "<group>";
@@ -6230,6 +6242,7 @@
 				1E79DD031D4FB2C5006BEB4A /* LocalDataStore.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
+				AFF56CFC1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift in Sources */,
 				4FE422401DD5E207000A7D1C /* InteractiveIntro.swift in Sources */,
 				1E79DD221D4FB2C5006BEB4A /* FooterActivityItemProvider.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
@@ -6316,6 +6329,7 @@
 				4FBAF3691DF9C72A00F4CEEE /* ConversationalHistoryAPI.swift in Sources */,
 				1E79DD211D4FB2C5006BEB4A /* CliqzSearchViewController.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
+				AFF56D001EA8F7C30025E354 /* HistoryDataSource.swift in Sources */,
 				1E79DEA61D508368006BEB4A /* AWSUICKeyChainStore.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				1EB293E01DB7AAC500D852C8 /* CliqzMainWindow.swift in Sources */,
@@ -6383,6 +6397,7 @@
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				1E1865101D5B2B580079B2CE /* LegacyJSContext.m in Sources */,
 				1E79DEA71D508368006BEB4A /* AWSCategory.m in Sources */,
+				AFF56CFE1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift in Sources */,
 				1E79DD2C1D4FB2C5006BEB4A /* YoutubeVideoDownloaderActivity.swift in Sources */,
 				1E79DE931D508368006BEB4A /* NSObject+AWSMTLComparisonAdditions.m in Sources */,
 				1E1432321D88539A001C27C9 /* BlockedRequestsCache.swift in Sources */,
@@ -6475,6 +6490,7 @@
 				1E79DE9E1D508368006BEB4A /* AWSClientContext.m in Sources */,
 				1E79DE871D508368006BEB4A /* AWSGZIP.m in Sources */,
 				7BC68CCE1CC152B70043562A /* MenuViewController.swift in Sources */,
+				AFFD63DA1EA77B88009340ED /* NewsDataSource.swift in Sources */,
 				1E79DD0C1D4FB2C5006BEB4A /* UIDeviceExtension.swift in Sources */,
 				7BC68CC61CC152B70043562A /* MenuItem.swift in Sources */,
 				1E79DE831D508368006BEB4A /* AWSFMDatabaseAdditions.m in Sources */,

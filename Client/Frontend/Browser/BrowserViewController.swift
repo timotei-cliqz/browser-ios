@@ -951,6 +951,7 @@ class BrowserViewController: UIViewController {
 			vc.view.hidden = true
 		}
 	}
+    //bring control over the History Navigation Controller here. This avoids nesting.
 
     private func showSearchController() {
         if searchController == nil {
@@ -1862,12 +1863,13 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
         searchLoader.query = text
         // Cliqz: always show search controller even if query was empty
-		showConversationalHistory()
+		//showConversationalHistory()
 		if text != "" {
 			showSearchController()
 			searchController!.searchQuery = text
 		} else {
 			hideSearchController()
+            showConversationalHistory()
 		}
 
         /*
