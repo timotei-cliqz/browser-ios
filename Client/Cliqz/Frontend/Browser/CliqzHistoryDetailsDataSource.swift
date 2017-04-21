@@ -14,8 +14,8 @@ class CliqzHistoryDetailsDataSource: HistoryDetailsProtocol{
     var visits:NSArray
     var base_Url: String
     
-    init(images:UIImage?, visits: NSArray, baseUrl:String) {
-        self.img = images
+    init(image:UIImage?, visits: NSArray, baseUrl:String) {
+        self.img = image
         self.visits = visits.sortedArrayUsingComparator({ (a,b) -> NSComparisonResult in
             if let dict_a = a as? NSDictionary, dict_b = b as? NSDictionary, time_a = dict_a["lastVisitedAt"] as? NSNumber, time_b = dict_b["lastVisitedAt"] as? NSNumber{
                 return time_a.doubleValue > time_b.doubleValue ? .OrderedAscending : .OrderedDescending

@@ -28,7 +28,7 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
     var dataSource: HistoryDataSource = HistoryDataSource()
     var first_appear:Bool = true
     
-    var didPressCell:(tableView: UITableView, indexPath:NSIndexPath) -> () = { _ in }
+    var didPressCell:(indexPath:NSIndexPath, image: UIImage?) -> () = { _ in }
 
 	weak var delegate: BrowserNavigationDelegate?
 
@@ -95,31 +95,11 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 	}
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let vc = ConversationalHistoryDetails()
-        vc.delegate = self.delegate
-        
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! HistoryCell
-        if indexPath.row == 0 {
-            //news
-            if NewsDataSource.sharedInstance.ready{
-                let datasource = CliqzNewsDetailsDataSource(image:cell.logoButton.imageView?.image, articles: NewsDataSource.sharedInstance.articles)
-                vc.dataSource = datasource
-            }
-        }
-        else{
-            let key = dataSource.domains[indexPath.row]
-            let value = dataSource.domainsInfo.valueForKey(key) as! NSDictionary
-            vc.dataSource = CliqzHistoryDetailsDataSource(images: cell.logoButton.imageView?.image, visits: value.valueForKey("visits") as? NSArray ?? NSArray(), baseUrl: value.valueForKey("baseUrl") as? String ?? "")
-        }
-        
-		self.navigationController?.pushViewController(vc, animated: false)
+        let image = cell.logoButton.imageView?.image
+        didPressCell(indexPath: indexPath, image: image)
 	}
 	
-	@objc private func goBack() {
-		self.navigationController?.popViewControllerAnimated(false)
-	}
-
 }
 
 extension ConversationalHistory: HistoryActionDelegate {

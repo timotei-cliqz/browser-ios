@@ -592,6 +592,7 @@
 		A91528D21D0E637600CD0425 /* NoImageModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A91528D11D0E637600CD0425 /* NoImageModeHelper.js */; };
 		A93067D91D0FE15E00C49C6E /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A93067D81D0FE15E00C49C6E /* NightModeHelper.js */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		AF6C3BD01EAA111300A6C723 /* ConversationalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C3BCF1EAA111300A6C723 /* ConversationalContainer.swift */; };
 		AFF56CFC1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */; };
 		AFF56CFE1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */; };
 		AFF56D001EA8F7C30025E354 /* HistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */; };
@@ -1963,6 +1964,7 @@
 		A91528D11D0E637600CD0425 /* NoImageModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NoImageModeHelper.js; sourceTree = "<group>"; };
 		A93067D81D0FE15E00C49C6E /* NightModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NightModeHelper.js; sourceTree = "<group>"; };
 		A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHelper.swift; sourceTree = "<group>"; };
+		AF6C3BCF1EAA111300A6C723 /* ConversationalContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationalContainer.swift; sourceTree = "<group>"; };
 		AF7BD6E91E4B2EC100E24A1A /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Client/Application/LaunchScreen.xib; sourceTree = "<group>"; };
 		AF7BD6EB1E4B2FAF00E24A1A /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Client/Assets/Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzHistoryDetailsDataSource.swift; sourceTree = "<group>"; };
@@ -3707,6 +3709,7 @@
 		4FBAF3671DF9C47200F4CEEE /* ConversationalHistory */ = {
 			isa = PBXGroup;
 			children = (
+				AF6C3BCF1EAA111300A6C723 /* ConversationalContainer.swift */,
 				4FBAF3531DF970A400F4CEEE /* ConversationalHistory.swift */,
 				4FBAF3641DF995F000F4CEEE /* ConversationalHistoryDetails.swift */,
 				4FBAF3681DF9C72A00F4CEEE /* ConversationalHistoryAPI.swift */,
@@ -6280,6 +6283,7 @@
 				4F88A6F31D7714D30039775D /* BrowserNavigationDelegate.swift in Sources */,
 				1E79DD2A1D4FB2C5006BEB4A /* TransitionAnimator.swift in Sources */,
 				D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */,
+				AF6C3BD01EAA111300A6C723 /* ConversationalContainer.swift in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				1EB293F11DB7D08F00D852C8 /* ElementAtPoint.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,

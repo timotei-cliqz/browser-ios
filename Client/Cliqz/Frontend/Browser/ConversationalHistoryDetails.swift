@@ -30,6 +30,8 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	weak var delegate: BrowserNavigationDelegate?
 	
 	private var urls: NSArray!
+    
+    var didPressBack: () -> () = { _ in }
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -42,8 +44,6 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 		self.historyTableView.dataSource = self
 		self.historyTableView.registerClass(HistoryDetailCell.self, forCellReuseIdentifier: historyCellID)
 		self.historyTableView.separatorStyle = .None
-
-//		self.historyTableView.tableFooterView = UIView()
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -135,7 +135,7 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	}
 	
 	@objc private func goBack() {
-		self.navigationController?.popViewControllerAnimated(false)
+        didPressBack()
 	}
 	
 	@objc private func logoPressed() {
