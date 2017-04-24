@@ -593,6 +593,7 @@
 		A93067D91D0FE15E00C49C6E /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A93067D81D0FE15E00C49C6E /* NightModeHelper.js */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		AF6C3BD01EAA111300A6C723 /* ConversationalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C3BCF1EAA111300A6C723 /* ConversationalContainer.swift */; };
+		AF89E3E21EAE185C000253A2 /* CINotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF89E3E11EAE185C000253A2 /* CINotificationManager.swift */; };
 		AFF56CFC1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */; };
 		AFF56CFE1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */; };
 		AFF56D001EA8F7C30025E354 /* HistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */; };
@@ -1967,6 +1968,7 @@
 		AF6C3BCF1EAA111300A6C723 /* ConversationalContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationalContainer.swift; sourceTree = "<group>"; };
 		AF7BD6E91E4B2EC100E24A1A /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Client/Application/LaunchScreen.xib; sourceTree = "<group>"; };
 		AF7BD6EB1E4B2FAF00E24A1A /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Client/Assets/Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AF89E3E11EAE185C000253A2 /* CINotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CINotificationManager.swift; sourceTree = "<group>"; };
 		AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzHistoryDetailsDataSource.swift; sourceTree = "<group>"; };
 		AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzNewsDetailsDataSource.swift; sourceTree = "<group>"; };
 		AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryDataSource.swift; sourceTree = "<group>"; };
@@ -3717,6 +3719,7 @@
 				AFF56CFB1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift */,
 				AFF56CFD1EA8B52D0025E354 /* CliqzNewsDetailsDataSource.swift */,
 				AFF56CFF1EA8F7C30025E354 /* HistoryDataSource.swift */,
+				AF89E3E11EAE185C000253A2 /* CINotificationManager.swift */,
 			);
 			name = ConversationalHistory;
 			sourceTree = "<group>";
@@ -6243,6 +6246,7 @@
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				4FF239DD1D5391FB00EEDE89 /* WebViewProgress.swift in Sources */,
 				1E79DD031D4FB2C5006BEB4A /* LocalDataStore.swift in Sources */,
+				AF89E3E21EAE185C000253A2 /* CINotificationManager.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				AFF56CFC1EA8B4E10025E354 /* CliqzHistoryDetailsDataSource.swift in Sources */,

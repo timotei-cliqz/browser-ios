@@ -51,6 +51,9 @@ final class ConversationalContainer: UIViewController {
     private func setupConversationalHistory() {
         conversationalHistory.delegate = self.browsing_delegate
         conversationalHistory.didPressCell = { (indexPath,image) in
+            if indexPath.row == 0 { //news
+                CINotificationManager.sharedInstance.newsVisisted = true
+            }
             let conversationalHistoryDetails = self.setUpConversationalHistoryDetails(indexPath, image: image)
             self.nc.pushViewController(conversationalHistoryDetails, animated: true)
         }

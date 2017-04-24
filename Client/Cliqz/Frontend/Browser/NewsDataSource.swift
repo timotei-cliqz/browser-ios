@@ -45,6 +45,7 @@ final class NewsDataSource{
                         self.last_update_server = (extra["last_update"] as? NSNumber)?.integerValue ?? 0
                         self.articles = articles
                         self.ready = true
+                        CINotificationManager.sharedInstance.newsVisisted = false
                     }
                 }
             }

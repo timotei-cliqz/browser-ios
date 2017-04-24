@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HistoryDataSource: NSObject, HistoryProtocol{
+final class HistoryDataSource: NSObject, HistoryProtocol {
     
     //Note: The mechanism is not robust enough to handle the failure of ConversationalHistoryAPI.getHistory
     //TO DO: Work on that.
@@ -19,36 +19,60 @@ class HistoryDataSource: NSObject, HistoryProtocol{
     let cliqzNews_header = "Cliqz News"
     let cliqzNews_title  = "Tap to Read"
     
+    private var loading: Bool = false
+    //Note: CompletionBlocks is not thread safe: I copy it when I iterate over it. 
+    var completionBlocks: [((ready:Bool) -> Void)?] = []
+    
     override init() {
         super.init()
         self.loadData(nil)
     }
     
     func loadData(completion:((ready:Bool) -> Void)?) {
-        ConversationalHistoryAPI.getHistory { (data) in
-            self.domainsInfo = data.valueForKey("domains") as! NSDictionary //how should I handle this. Is it guaranteed that it will always be an NSDictionary?
+        if loading == false {
             
-            let domains      = self.domainsInfo.keysSortedByValueUsingComparator({ (a, b) -> NSComparisonResult in
-                if let dict_a = a as? [String: AnyObject], dict_b = b as? [String: AnyObject], time_a = dict_a["lastVisitedAt"] as? NSNumber, time_b = dict_b["lastVisitedAt"] as? NSNumber
-                {
-                    return time_a.doubleValue > time_b.doubleValue ? .OrderedAscending : .OrderedDescending
+            loading = true
+            self.completionBlocks.append(completion)
+            
+            ConversationalHistoryAPI.getHistory { (data) in
+                self.domainsInfo = data.valueForKey("domains") as! NSDictionary //how should I handle this. Is it guaranteed that it will always be an NSDictionary?
+                let domains = self.sortedDomains(from: self.domainsInfo)
+                self.domains = []
+                self.domains.insert("cliqz.com", atIndex: 0)
+                self.domains.appendContentsOf(domains)
+                //completion?(ready:true)
+                self.loading = false
+                let blocks = self.completionBlocks //array is a value type, as well as the clojures inside. So this is a deep copy (on demand = copies when needed).
+                for completion in blocks{
+                    completion?(ready:true)
                 }
-                return .OrderedSame
-            }) as! [String]
-            
-            self.domains = []
-            self.domains.insert("cliqz.com", atIndex: 0)
-            self.domains.appendContentsOf(domains)
-            completion?(ready:true)
+                //elements could have been added in the meantime to completionBlocks, so take out only the first blocks.count
+                //take out the elements starting from the end, so the correspondence betweeen i and the indexes is not messed up.
+                for i in (0..<blocks.count).reverse() {
+                    self.completionBlocks.removeAtIndex(i)
+                }
+            }
+        }
+        else {
+            self.completionBlocks.append(completion)
         }
     }
     
-    func numberOfCells() -> Int{
+    func sortedDomains(from domainsDict:NSDictionary) -> [String] {
+        return domainsDict.keysSortedByValueUsingComparator({ (a, b) -> NSComparisonResult in
+            if let dict_a = a as? [String: AnyObject], dict_b = b as? [String: AnyObject], time_a = dict_a["lastVisitedAt"] as? NSNumber, time_b = dict_b["lastVisitedAt"] as? NSNumber
+            {
+                return time_a.doubleValue > time_b.doubleValue ? .OrderedAscending : .OrderedDescending
+            }
+            return .OrderedSame
+        }) as! [String]
+    }
+    
+    func numberOfCells() -> Int {
         return self.domains.count
     }
     
-    func urlLabelText(indexPath:NSIndexPath) -> String
-    {
+    func urlLabelText(indexPath:NSIndexPath) -> String {
         if indexPath.row == 0{
             return cliqzNews_header
         }
@@ -59,8 +83,7 @@ class HistoryDataSource: NSObject, HistoryProtocol{
         return ""
     }
     
-    func titleLabelText(indexPath:NSIndexPath) -> String
-    {
+    func titleLabelText(indexPath:NSIndexPath) -> String {
         if indexPath.row == 0{
             return cliqzNews_title
         }
@@ -69,12 +92,11 @@ class HistoryDataSource: NSObject, HistoryProtocol{
         }
     }
     
-    func timeLabelText(indexPath:NSIndexPath) -> String
-    {
+    func timeLabelText(indexPath:NSIndexPath) -> String {
         return ""
     }
     
-    func baseUrl(indexPath:NSIndexPath) -> String{
+    func baseUrl(indexPath:NSIndexPath) -> String {
         if indexPath.row == 0{
             return "https://www.cliqz.com"
         }
@@ -83,21 +105,33 @@ class HistoryDataSource: NSObject, HistoryProtocol{
         }
     }
     
-    func image(indexPath:NSIndexPath, completionBlock:(result:UIImage) -> Void){
+    func image(indexPath:NSIndexPath, completionBlock:(result:UIImage?) -> Void) {
         LogoLoader.loadLogoImageOrFakeLogo(self.domains[indexPath.row], completed: { (image, fakeLogo, error) in
             if let img = image{
                 completionBlock(result: img)
             }
             else{
-                completionBlock(result: UIImage(named: "coolLogo") ?? UIImage())
+                //completionBlock(result: UIImage(named: "coolLogo") ?? UIImage())
+                completionBlock(result: nil)
             }
         })
+    }
+    
+    func shouldShowNotification(indexPath:NSIndexPath) -> Bool {
+        if indexPath.row == 0 && !CINotificationManager.sharedInstance.newsVisisted {
+            return true
+        }
+        return false
+    }
+    
+    func notificationNumber(indexPath:NSIndexPath) -> Int {
+        return NewsDataSource.sharedInstance.articles.count
     }
     
     func domainValue(forKey key: String, at indexPath:NSIndexPath) -> String? {
         if indexWithinBounds(indexPath){
             let domainDict = domain(at: indexPath)
-            if let timeinterval = domainDict[key] as? NSNumber{
+            if let timeinterval = domainDict[key] as? NSNumber {
                 return NSDate(timeIntervalSince1970: timeinterval.doubleValue / 1000).toRelativeTimeString()
             }
             return domainDict[key] as? String

@@ -17,7 +17,9 @@ protocol HistoryProtocol: class{
     func titleLabelText(indexPath:NSIndexPath) -> String
     func timeLabelText(indexPath:NSIndexPath) -> String
     func baseUrl(indexPath:NSIndexPath) -> String
-    func image(indexPath:NSIndexPath, completionBlock:(result:UIImage) -> Void)
+    func image(indexPath:NSIndexPath, completionBlock:(result:UIImage?) -> Void)
+    func shouldShowNotification(indexPath:NSIndexPath) -> Bool
+    func notificationNumber(indexPath:NSIndexPath) -> Int
 }
 
 class ConversationalHistory: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -76,14 +78,20 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		cell.delegate = self
         cell.tag = indexPath.row
         
-        cell.logoButton.setImage(UIImage.fromColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), size: CGSize(width: 60, height: 60)), forState: .Normal)
-        
         cell.URLLabel.text   = dataSource.urlLabelText(indexPath)
         cell.titleLabel.text = dataSource.titleLabelText(indexPath)
         dataSource.image(indexPath) { (result) in
-            if cell.tag == indexPath.row{
+            if cell.tag == indexPath.row && result != nil{
                 cell.logoButton.setImage(result, forState: .Normal)
             }
+        }
+        
+        if dataSource.shouldShowNotification(indexPath) {
+            cell.notificationView.hidden = false
+            cell.notificationView.numberLabel.text = String(dataSource.notificationNumber(indexPath))
+        }
+        else{
+            cell.notificationView.hidden = true
         }
 
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -142,11 +150,18 @@ class HistoryCell: UITableViewCell {
 	let titleLabel = UILabel()
 	let URLLabel = UILabel()
 	let logoButton = UIButton() //UIImageView()
+    let defaultImage = UIImage.fromColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), size: CGSize(width: 60, height: 60))
+    
+    let notificationView: CellNotificationView
+    let notificationHeight: CGFloat = CGFloat(21)
 
 	weak var delegate: HistoryActionDelegate?
 
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        notificationView = CellNotificationView(frame: CGRect(x: 0, y: 0, width: notificationHeight, height: notificationHeight))
+		
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 		self.contentView.addSubview(titleLabel)
 		titleLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
 		titleLabel.textColor = UIColor.lightGrayColor()
@@ -161,11 +176,18 @@ class HistoryCell: UITableViewCell {
 		logoButton.layer.cornerRadius = 20
 		logoButton.clipsToBounds = true
 		self.logoButton.addTarget(self, action: #selector(logoPressed), forControlEvents: .TouchUpInside)
-	}
+        logoButton.setImage(defaultImage, forState: .Normal)
+        self.contentView.addSubview(notificationView)
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.logoButton.setImage(defaultImage, forState: .Normal)
+    }
 
 	override func layoutSubviews() {
 		super.layoutSubviews()
@@ -187,12 +209,45 @@ class HistoryCell: UITableViewCell {
 			make.height.equalTo(20)
 			make.right.equalTo(self.contentView).offset(40)
 		}
+        self.notificationView.snp_remakeConstraints { (make) in
+            make.width.height.equalTo(notificationHeight)
+            make.centerY.equalTo(self.contentView)
+            make.right.equalTo(self.contentView).inset(12)
+        }
 	}
 	
 	@objc private func logoPressed() {
 		self.delegate?.didSelectLogo(atIndex: self.tag)
 	}
 	
+}
+
+class CellNotificationView: UIView {
+    
+    let numberLabel: UILabel = UILabel()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.commonInit()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.commonInit()
+    }
+    
+    func commonInit(){
+        let bounds = self.bounds
+        self.layer.cornerRadius = min(bounds.width/2, bounds.height/2)
+        self.backgroundColor = UIColor(colorString: "4FACED")
+        self.clipsToBounds = true
+        self.addSubview(numberLabel)
+        numberLabel.frame = bounds
+        numberLabel.text = "0"
+        numberLabel.textColor = UIColor.whiteColor()
+        numberLabel.textAlignment = .Center
+        numberLabel.font = UIFont.systemFontOfSize(14)
+    }
 }
 
 extension UIImage {
