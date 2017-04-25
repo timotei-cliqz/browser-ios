@@ -42,6 +42,10 @@ class CliqzNewsDetailsDataSource: HistoryDetailsProtocol{
         return articles.count
     }
     
+    func isNews() -> Bool {
+        return true
+    }
+    
     func articleValue(forKey key: String, at indexPath:NSIndexPath) -> String? {
         if indexWithinBounds(indexPath){
             let art = article(at: indexPath)

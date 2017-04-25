@@ -18,6 +18,7 @@ protocol HistoryDetailsProtocol: class {
     func baseUrl() -> String
     func numberOfCells() -> Int
     func image() -> UIImage?
+    func isNews() -> Bool
 }
 
 class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -58,12 +59,22 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell =  self.historyTableView.dequeueReusableCellWithIdentifier(self.historyCellID) as! HistoryDetailCell
         
-        cell.URLLabel.text = dataSource?.urlLabelText(indexPath)
+        let articleLink    = dataSource?.urlLabelText(indexPath)
+        cell.URLLabel.text = articleLink
         cell.titleLabel.text = dataSource?.titleLabelText(indexPath)
         cell.timeLabel.text = dataSource?.timeLabelText(indexPath)
 		cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		cell.selectionStyle = .None
-
+        
+        if let isNews = dataSource?.isNews() where isNews == true {
+            if let art_link = articleLink where ReadNewsManager.sharedInstance.isRead(art_link) == false {
+                cell.changeBorderColor(to: .Highlighted)
+            }
+            else{
+                cell.changeBorderColor(to: .NotHighlighted)
+            }
+        }
+        
 		return cell
 	}
 	
@@ -129,6 +140,7 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		if let urlString = dataSource?.urlLabelText(indexPath), let url = NSURL(string: urlString) {
+            ReadNewsManager.sharedInstance.markAsRead(urlString)
 			self.navigationController?.popViewControllerAnimated(false)
 			self.delegate?.navigateToURL(url)
 		}
@@ -148,6 +160,12 @@ class ConversationalHistoryDetails: UIViewController, UITableViewDataSource, UIT
 }
 
 class HistoryDetailCell: UITableViewCell {
+    
+    enum BorderState{
+        case Highlighted
+        case NotHighlighted
+    }
+    
 	let titleLabel = UILabel()
 	let descriptionLabel = UILabel()
 	let URLLabel = UILabel()
@@ -188,6 +206,15 @@ class HistoryDetailCell: UITableViewCell {
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+    
+    func changeBorderColor(to state:BorderState) {
+        if state == .Highlighted{
+            self.borderView.layer.borderColor = UIColor(colorString: "4FACED").CGColor
+        }
+        else{
+            self.borderView.layer.borderColor = UIColor(colorLiteralRed: 0.9, green: 0.9, blue: 0.9, alpha: 1).CGColor
+        }
+    }
 	
 	override func layoutSubviews() {
 		self.borderView.snp_makeConstraints { (make) in

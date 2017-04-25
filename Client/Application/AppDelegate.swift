@@ -433,6 +433,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Cliq: notify the AppStatus that the app entered background
         AppStatus.sharedInstance.appDidEnterBackground()
         
+        //Save the read news
+        ReadNewsManager.sharedInstance.save()
+        
+        //Save current News Links 
+        NewsDataSource.sharedInstance.save()
+        
         // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
         let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
         tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)

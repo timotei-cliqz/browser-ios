@@ -53,6 +53,8 @@ final class ConversationalContainer: UIViewController {
         conversationalHistory.didPressCell = { (indexPath,image) in
             if indexPath.row == 0 { //news
                 CINotificationManager.sharedInstance.newsVisisted = true
+                //also tell the NewsDataSource that the new articles are seen.
+                NewsDataSource.sharedInstance.setNewArticlesAsSeen()
             }
             let conversationalHistoryDetails = self.setUpConversationalHistoryDetails(indexPath, image: image)
             self.nc.pushViewController(conversationalHistoryDetails, animated: true)
@@ -141,6 +143,63 @@ final class ConversationalContainer: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+}
+
+final class ReadNewsManager {
+    
+    //articles change every day. So only articles that are youger than 1 day should stay in my manager
+    //I will write to disk the current articles when the application is closed.
+    
+    //user defaults key
+    private let userDefaultsKey_Read = "ID_READ_NEWS"
+    
+    private var readArticlesDict: Dictionary<String,NSDate> = Dictionary()
+    
+    static let sharedInstance = ReadNewsManager()
+    
+    init() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let read = userDefaults.valueForKey(userDefaultsKey_Read) as? Dictionary<String,NSDate> {
+            //here add only keys that have a value younger than 1 day.
+            self.readArticlesDict = self.youngerThanOneDayDict(read)
+        }
+    }
+    
+    func youngerThanOneDayDict(dict: Dictionary<String,NSDate>) -> Dictionary<String,NSDate>{
+        var returnDict: Dictionary<String,NSDate> = Dictionary()
+        for key in dict.keys{
+            if let date = dict[key] where isYoungerThanOneDay(date){
+                returnDict[key] = date
+            }
+        }
+        return returnDict
+    }
+    
+    func isYoungerThanOneDay(date:NSDate) -> Bool{
+        let currentDate = NSDate(timeIntervalSinceNow: 0)
+        let difference_seconds = currentDate.timeIntervalSinceDate(date)
+        let oneDay_seconds     = Double(24 * 360)
+        if difference_seconds > 0 && difference_seconds < oneDay_seconds {
+            return true
+        }
+        return false
+    }
+    
+    func isRead(articleLink:String) -> Bool {
+        return readArticlesDict.keys.contains(articleLink)
+    }
+    
+    func markAsRead(articleLink:String?) {
+        guard let art_link = articleLink else { return }
+        readArticlesDict[art_link] = NSDate(timeIntervalSinceNow: 0)
+    }
+    
+    func save(){
+        NSUserDefaults.standardUserDefaults().setObject(self.readArticlesDict, forKey: userDefaultsKey_Read)
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
 }

@@ -49,6 +49,10 @@ class CliqzHistoryDetailsDataSource: HistoryDetailsProtocol{
         return self.base_Url
     }
     
+    func isNews() -> Bool {
+        return false
+    }
+    
     func visitValue(forKey key: String, at indexPath:NSIndexPath) -> String? {
         if indexWithinBounds(indexPath){
             if let vis = visit(at: indexPath){

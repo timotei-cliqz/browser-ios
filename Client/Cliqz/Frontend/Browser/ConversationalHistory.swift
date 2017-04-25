@@ -78,7 +78,8 @@ class ConversationalHistory: UIViewController, UITableViewDataSource, UITableVie
 		cell.delegate = self
         cell.tag = indexPath.row
         
-        cell.URLLabel.text   = dataSource.urlLabelText(indexPath)
+        let articleLink = dataSource.urlLabelText(indexPath)
+        cell.URLLabel.text   = articleLink
         cell.titleLabel.text = dataSource.titleLabelText(indexPath)
         dataSource.image(indexPath) { (result) in
             if cell.tag == indexPath.row && result != nil{
