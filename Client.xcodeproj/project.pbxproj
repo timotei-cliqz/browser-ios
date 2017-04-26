@@ -1149,6 +1149,20 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		AFFFF9F51EAF8DF5007443A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB89FFC1CAC546900C6DFC1;
+			remoteInfo = KIFFrameworkConsumer;
+		};
+		AFFFF9F71EAF8DF5007443A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB8A0141CAC546A00C6DFC1;
+			remoteInfo = KIFFrameworkConsumerTests;
+		};
 		D30EBB631C75503800105AE9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
@@ -3945,6 +3959,8 @@
 				D30EBB661C75503800105AE9 /* Test Host.app */,
 				D30EBB681C75503800105AE9 /* KIF Tests - XCTest.xctest */,
 				D30EBB6A1C75503800105AE9 /* KIF.framework */,
+				AFFFF9F61EAF8DF5007443A7 /* KIFFrameworkConsumer.app */,
+				AFFFF9F81EAF8DF5007443A7 /* KIFFrameworkConsumerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5414,6 +5430,20 @@
 			fileType = wrapper.cfbundle;
 			path = "SQLiteCipher Mac Tests.xctest";
 			remoteRef = 7B9A62E81C4002B1005C83DC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AFFFF9F61EAF8DF5007443A7 /* KIFFrameworkConsumer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = KIFFrameworkConsumer.app;
+			remoteRef = AFFFF9F51EAF8DF5007443A7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AFFFF9F81EAF8DF5007443A7 /* KIFFrameworkConsumerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = KIFFrameworkConsumerTests.xctest;
+			remoteRef = AFFFF9F71EAF8DF5007443A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D30EBB641C75503800105AE9 /* libKIF.a */ = {
@@ -7534,8 +7564,8 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DCLIQZ";
 				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.Today;
 				PRODUCT_NAME = Today;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
+				PROVISIONING_PROFILE = "dcb7e088-2031-44b7-b6a7-4c10edf2763d";
+				PROVISIONING_PROFILE_SPECIFIER = "Universal Cliqz AppStore";
 				SWIFT_VERSION = 2.3;
 			};
 			name = Firefox;
@@ -7945,7 +7975,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = TalkToMe;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "fa69558e-1389-4710-95f1-3212435555b4";
 				PROVISIONING_PROFILE_SPECIFIER = HackDay;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules $(PROJECT_DIR)/Client/Cliqz/Foundation/Networking/zlib";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7993,8 +8023,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ShareTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
+				PROVISIONING_PROFILE = "dcb7e088-2031-44b7-b6a7-4c10edf2763d";
+				PROVISIONING_PROFILE_SPECIFIER = "Universal Cliqz AppStore";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8019,8 +8049,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.SendTo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
+				PROVISIONING_PROFILE = "dcb7e088-2031-44b7-b6a7-4c10edf2763d";
+				PROVISIONING_PROFILE_SPECIFIER = "Universal Cliqz AppStore";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 2.3;
 			};
@@ -8282,8 +8312,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hackDay.cliqz.com.ViewLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Universal App Store";
+				PROVISIONING_PROFILE = "dcb7e088-2031-44b7-b6a7-4c10edf2763d";
+				PROVISIONING_PROFILE_SPECIFIER = "Universal Cliqz AppStore";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 2.3;
 			};

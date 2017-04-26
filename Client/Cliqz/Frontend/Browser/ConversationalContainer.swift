@@ -53,7 +53,6 @@ final class ConversationalContainer: UIViewController {
         conversationalHistory.didPressCell = { (indexPath,image) in
             if indexPath.row == 0 { //news
                 CINotificationManager.sharedInstance.newsVisisted = true
-                //also tell the NewsDataSource that the new articles are seen.
                 NewsDataSource.sharedInstance.setNewArticlesAsSeen()
             }
             let conversationalHistoryDetails = self.setUpConversationalHistoryDetails(indexPath, image: image)

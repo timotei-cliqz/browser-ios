@@ -118,7 +118,7 @@ final class HistoryDataSource: NSObject, HistoryProtocol {
     }
     
     func shouldShowNotification(indexPath:NSIndexPath) -> Bool {
-        if indexPath.row == 0 && NewsDataSource.sharedInstance.newArticleCount() > 0 {
+        if indexPath.row == 0 && NewsDataSource.sharedInstance.newArticlesAvailable() {
             return true
         }
         return false

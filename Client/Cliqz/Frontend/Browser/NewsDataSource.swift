@@ -29,7 +29,7 @@ final class NewsDataSource{
     var last_update_server: Int = 0
     var articles: [[String:AnyObject]] = []
     private var articleLinks: Set<String> = []
-    private var newArticlesCount: Int = 0
+    private var new_article_count: Int = 0
     
     init() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -40,12 +40,16 @@ final class NewsDataSource{
         getNews(news_to_fetch)
     }
     
+    func newArticlesAvailable() -> Bool{
+        return self.new_article_count > 0
+    }
+    
     func newArticleCount() -> Int {
-        return self.newArticlesCount
+        return self.new_article_count
     }
     
     func setNewArticlesAsSeen(){
-        self.newArticlesCount = 0
+        self.new_article_count = 0
     }
     
     private func getNews(count:Int) { // -> [String: String]{
@@ -78,7 +82,7 @@ final class NewsDataSource{
         self.articles = articles
         
         let new_links = newLinks(articles)
-        self.newArticlesCount = newArticles(between: articleLinks, and: new_links)
+        self.new_article_count = newArticles(between: articleLinks, and: new_links)
         self.articleLinks = new_links
         
         CINotificationManager.sharedInstance.newsVisisted = false

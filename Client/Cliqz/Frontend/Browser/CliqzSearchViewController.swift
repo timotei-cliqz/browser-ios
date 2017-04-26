@@ -228,7 +228,7 @@ class CliqzSearchViewController : UIViewController, LoaderListener, WKNavigation
         }
         
 		let q = query.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-		var parameters = "'\(q)'"
+		var parameters = "'\(q.escape())'"
 		if let l = LocationManager.sharedInstance.location {
 			parameters += ", true, \(l.coordinate.latitude), \(l.coordinate.longitude)"
 		}
