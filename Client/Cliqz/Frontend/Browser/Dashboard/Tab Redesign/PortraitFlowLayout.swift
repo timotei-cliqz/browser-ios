@@ -47,6 +47,7 @@ class PortraitFlowLayout: UICollectionViewFlowLayout {
     }
     
     override func prepare() {
+        super.prepare()
         if let count = self.collectionView?.numberOfItems(inSection: 0) {
             if count != currentCount {
                 currentTransform = computeTransform(count: count)

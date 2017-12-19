@@ -330,9 +330,9 @@ extension TabsViewController: UICollectionViewDataSource {
         }
         
         if let favIconString = tab.displayFavicon?.url, let favIconUrl = URL(string:favIconString) {
-            
+
             let options = [SDWebImageOptions.lowPriority]
-            
+
             SDWebImageManager.shared().downloadImage(with: favIconUrl, options: SDWebImageOptions(options), progress: nil, completed: { (image , error , cacheType, success , given_url) in
                 guard cell.tag == indexPath.row else { return }
                 if success {
@@ -344,21 +344,27 @@ extension TabsViewController: UICollectionViewDataSource {
         } else {
             cell.setSmallUpperLogo(UIImage(named: "favIconDefault"))
         }
-        
+
         if let url = tab.displayURL?.absoluteString {
-            
-            LogoLoader.loadLogo(url, completionBlock: { (image, logoInfo, error) in
-                guard cell.tag == indexPath.row else { return }
-                
-                if image != nil {
-                    cell.setBigLogo(image: image, cliqzLogo: false)
-                }
-                else if var info = logoInfo {
-                    info.fontSize = 44
-                    let fakeLogo = LogoPlaceholder(logoInfo: info)
-                    cell.setBigLogoView(fakeLogo)
-                }
-            })
+
+            DispatchQueue(label: "background").async {
+                LogoLoader.loadLogo(url, completionBlock: { (image, logoInfo, error) in
+                    guard cell.tag == indexPath.row else { return }
+
+                    DispatchQueue.main.async {
+                        if image != nil {
+                            cell.setBigLogo(image: image, cliqzLogo: false)
+                        }
+                        else if var info = logoInfo {
+                            info.fontSize = 44
+                            let fakeLogo = LogoPlaceholder(logoInfo: info)
+                            cell.setBigLogoView(fakeLogo)
+                        }
+                    }
+
+                })
+            }
+
         }
         else{
             cell.setBigLogo(image: UIImage(named: "cliqzTabLogo"), cliqzLogo: true)
