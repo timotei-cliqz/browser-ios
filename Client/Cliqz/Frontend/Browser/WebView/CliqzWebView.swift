@@ -53,8 +53,8 @@ var nullWKNavigation: WKNavigation = WKNavigation()
                 }
             }
             wv.lastTappedTime = nil
-            if let _url = URL(string: url, relativeTo: current) {
-                //getApp().browserViewController.openURLInNewTab(_url)
+            if let _ = URL(string: url, relativeTo: current) {
+                StateManager.shared.handleAction(action: Action(data: ["url": url], type: .urlSelected, actionFlag: .openNewTab))
             }
         }
     }
@@ -77,7 +77,7 @@ class WebViewToUAMapper {
     }
     
     static func idToWebView(_ uniqueId: Int?) -> CliqzWebView? {
-        return idToWebview.object(forKey: uniqueId as AnyObject) as? CliqzWebView
+        return idToWebview.object(forKey: uniqueId as AnyObject)
     }
     
     static func userAgentToWebview(_ userAgent: String?) -> CliqzWebView? {
@@ -88,11 +88,11 @@ class WebViewToUAMapper {
         guard let userAgent = userAgent else { return nil }
         guard let loc = userAgent.range(of: "_id/") else {
             // the first created webview doesn't have this id set (see webviewBuiltinUserAgent to explain)
-            return idToWebview.object(forKey: 1 as AnyObject) as? CliqzWebView
+            return idToWebview.object(forKey: 1 as AnyObject)
         }
 		let keyString = userAgent.substring(with: loc.upperBound..<userAgent.index(loc.upperBound, offsetBy: 6)) // .upperBound..<index.index(loc.upperBound, offsetBy: 6))
         guard let key = Int(keyString) else { return nil }
-        return idToWebview.object(forKey: key as AnyObject) as? CliqzWebView
+        return idToWebview.object(forKey: key as AnyObject)
     }
 }
 
@@ -126,6 +126,7 @@ class CliqzWebView: UIWebView {
     fileprivate static var webviewBuiltinUserAgent: String?
 
 	fileprivate var _url: (url: Foundation.URL?, isReliableSource: Bool, prevUrl: Foundation.URL?) = (nil, false, nil)
+    
 	func setUrl(_ url: Foundation.URL?, reliableSource: Bool) {
 		_url.prevUrl = _url.url
 		_url.isReliableSource = reliableSource
@@ -145,7 +146,7 @@ class CliqzWebView: UIWebView {
 		}
 	}*/
     
-    var _loading: Bool = false
+    fileprivate var _loading: Bool = false
     override internal dynamic var isLoading: Bool {
         get {
             if internalLoadingEndedFlag {
@@ -159,7 +160,7 @@ class CliqzWebView: UIWebView {
         }
     }
     
-    var _canGoBack: Bool = false
+    fileprivate var _canGoBack: Bool = false
     override internal dynamic var canGoBack: Bool {
         get {
             return super.canGoBack
@@ -169,7 +170,7 @@ class CliqzWebView: UIWebView {
         }
     }
     
-    var _canGoForward: Bool = false
+    fileprivate var _canGoForward: Bool = false
     override internal dynamic var canGoForward: Bool {
         get {
             return super.canGoForward
@@ -188,6 +189,14 @@ class CliqzWebView: UIWebView {
 		}
 	}
     
+    // Anti-Tracking
+    var uniqueId = -1
+    var unsafeRequests = 0 {
+        didSet {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationBadRequestDetected), object: self.uniqueId)
+        }
+    }
+    
     var knownFrameContexts = Set<NSObject>()
 
 	var prevDocumentLocation = ""
@@ -199,33 +208,20 @@ class CliqzWebView: UIWebView {
     
     var lastTappedTime: Date?
     
-    static var modifyLinksScript: WKUserScript?
+    var modifyLinksScript: WKUserScript?
     
-    override class func initialize() {
-        // Added for modifying page links with target blank to open in new tabs
-        let path = Bundle.main.path(forResource: "ModifyLinksForNewTab", ofType: "js")!
-        let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
-        modifyLinksScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
-
-    }
+    var customUserAgent:String?
     
 	init(frame: CGRect, configuration: WKWebViewConfiguration) {
 		super.init(frame: frame)
 		commonInit()
 	}
-
-    // Anti-Tracking
-    var uniqueId = -1
-	var unsafeRequests = 0 {
-		didSet {
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationBadRequestDetected), object: self.uniqueId)
-		}
-	}
-
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		commonInit()
-	}
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    
     deinit {
         
         WebViewToUAMapper.removeWebViewWithId(self.uniqueId)
@@ -233,165 +229,30 @@ class CliqzWebView: UIWebView {
         _ = Try(withTry: {
             self.removeProgressObserversOnDeinit?(self)
         }) { (exception) -> Void in
-            debugPrint("Failed remove: \(exception)")
-        }
-    }
-	
-	func goToBackForwardListItem(item: LegacyBackForwardListItem) {
-		if let index = backForwardList.backList.index(of: item) {
-			let backCount = backForwardList.backList.count - index
-			for _ in 0..<backCount {
-				goBack()
-			}
-		} else if let index = backForwardList.forwardList.index(of: item) {
-			for _ in 0..<(index + 1) {
-				goForward()
-			}
-		}
-	}
-
-	func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
-		ensureMainThread() {
-			let wrapped = "var result = \(javaScriptString); JSON.stringify(result)"
-			let evaluatedstring = self.stringByEvaluatingJavaScript(from: wrapped)
-            
-            var result: AnyObject?
-            if let dict = self.convertStringToDictionary(evaluatedstring) {
-                result = dict as AnyObject?
-            } else {
-                // in case the result was not dictionary, return the original response (reverse JSON stringify)
-                result = self.reverseStringify(evaluatedstring) as AnyObject?
-            }
-			completionHandler?(result, NSError(domain: NSURLErrorDomain, code: NSURLErrorCannotOpenFile, userInfo: nil))
-		}
-	}
-	
-	override func loadRequest(_ request: URLRequest) {
-		if let url = request.url,
-			!ReaderModeUtils.isReaderModeURL(url) {
-			unsafeRequests = 0
-		}
-		super.loadRequest(request)
-	}
-
-	func loadingCompleted() {
-		if internalLoadingEndedFlag {
-			return
-		}
-		internalLoadingEndedFlag = true
-        
-        self.configuration.userContentController.injectJsIntoPage()
-		
-		guard let docLoc = self.stringByEvaluatingJavaScript(from: "document.location.href") else { return }
-
-		if docLoc != self.prevDocumentLocation {
-			if !(self.url?.absoluteString.startsWith(WebServer.sharedInstance.base) ?? false) && !docLoc.startsWith(WebServer.sharedInstance.base) {
-				self.title = self.stringByEvaluatingJavaScript(from: "document.title") ?? Foundation.URL(string: docLoc)?.baseDomain() ?? ""
-			}
-
-			if let nd = self.navigationDelegate {
-				globalContainerWebView.legacyWebView = self
-				nd.webView?(globalContainerWebView, didFinish: nullWKNavigation)
-			}
-		}
-		self.prevDocumentLocation = docLoc
-        
-        NotificationCenter.default.post(name: Notification.Name(rawValue: CliqzWebViewConstants.kNotificationWebViewLoadCompleteOrFailed), object: self)
-	}
-	
-	var customUserAgent:String? /*{
-		willSet {
-			if self.customUserAgent == newValue || newValue == nil {
-				return
-			}
-			self.customUserAgent = newValue == nil ? nil : kDesktopUserAgent
-			// The following doesn't work, we need to kill and restart the webview, and restore its history state
-			// for this setting to take effect
-			//      let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
-			//      defaults.registerDefaults(["UserAgent": (self.customUserAgent ?? "")])
-		}
-	}*/
-	
-	func reloadFromOrigin() {
-		self.reload()
-	}
-    
-    func updateUnsafeRequestsCount(_ newCount: Int) {
-        lockQueue.sync {
-            self.unsafeRequests = newCount
+            debugPrint("Failed remove: \(String(describing: exception))")
         }
     }
     
-    
-    // On page load, the contentSize of the webview is updated (**). If the webview has not been notified of a page change (i.e. shouldStartLoadWithRequest was never called) then 'loading' will be false, and we should check the page location using JS.
-    // (** Not always updated, particularly on back/forward. For instance load duckduckgo.com, then google.com, and go back. No content size change detected.)
-    func contentSizeChangeDetected() {
-        if triggeredLocationCheckTimer.isValid {
-            return
-        }
-        
-        // Add a time delay so that multiple calls are aggregated
-        triggeredLocationCheckTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeoutCheckLocation), userInfo: nil, repeats: false)
-    }
-    
-    // Pushstate navigation may require this case (see brianbondy.com), as well as sites for which simple pushstate detection doesn't work:
-    // youtube and yahoo news are examples of this (http://stackoverflow.com/questions/24297929/javascript-to-listen-for-url-changes-in-youtube-html5-player)
-    @objc func timeoutCheckLocation() {
-        func shouldUpdateUrl(_ currentUrl: String, newLocation: String) -> Bool {
-            if newLocation == currentUrl || newLocation.contains("about:") || newLocation.contains("//localhost") || url?.host != Foundation.URL(string: newLocation)?.host {
-                return false
-            }
-            return true
-        }
-        
-        func tryUpdateUrl() {
-            guard let location = self.stringByEvaluatingJavaScript(from: "window.location.href"), let currentUrl = url?.absoluteString, shouldUpdateUrl(currentUrl, newLocation: location) else {
-                return
-            }
-            
-            setUrl(Foundation.URL(string: location), reliableSource: false)
-
-            progress?.reset()
-        }
-        
-        DispatchQueue.main.async { 
-            tryUpdateUrl()
-        }
-        
-    }
-    
-    override func goBack() {
-        super.goBack()
-        self.canGoForward = true
-    }
-
-    
-    override func goForward() {
-        super.goForward()
-        self.canGoBack = true
-    }
-    
-	// MARK:- Private methods
-
-	fileprivate class func isTopFrameRequest(_ request:URLRequest) -> Bool {
-		return request.url == request.mainDocumentURL
-	}
-	
-	fileprivate func commonInit() {
-		delegate = self
+    fileprivate func commonInit() {
+        delegate = self
         scalesPageToFit = true
         generateUniqueUserAgent()
         Engine.sharedInstance.getWebRequest().newTabCreated(self.uniqueId, webView: self)
-		progress = WebViewProgress(parent: self)
-		let refresh = UIRefreshControl()
-		refresh.bounds = CGRect(x: 0, y: -10, width: refresh.bounds.size.width, height: refresh.bounds.size.height)
-		refresh.tintColor = UIColor.black
-		refresh.addTarget(self, action: #selector(refreshWebView), for: UIControlEvents.valueChanged)
-		self.scrollView.addSubview(refresh)
-		
+        progress = WebViewProgress(parent: self)
+        let refresh = UIRefreshControl()
+        refresh.bounds = CGRect(x: 0, y: -10, width: refresh.bounds.size.width, height: refresh.bounds.size.height)
+        refresh.tintColor = UIColor.black
+        refresh.addTarget(self, action: #selector(refreshWebView), for: UIControlEvents.valueChanged)
+        self.scrollView.addSubview(refresh)
+        
+        // Added for modifying page links with target blank to open in new tabs
+        let path = Bundle.main.path(forResource: "ModifyLinksForNewTab", ofType: "js")!
+        let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
+        modifyLinksScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+        
         // built-in userScripts
-		self.configuration.userContentController.addUserScript(CliqzWebView.modifyLinksScript!)
-	}
+        self.configuration.userContentController.addUserScript(modifyLinksScript!)
+    }
 
     // Needed to identify webview in url protocol
     func generateUniqueUserAgent() {
@@ -422,18 +283,154 @@ class CliqzWebView: UIWebView {
         }
     }
     
-	fileprivate func convertStringToDictionary(_ text: String?) -> [String:AnyObject]? {
-		if let data = text?.data(using: String.Encoding.utf8), text?.characters.count > 0 {
-			do {
-				let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
-				return json
-			} catch {
-				debugPrint("Something went wrong")
-			}
-		}
-		return nil
+	@objc fileprivate func refreshWebView(_ refresh: UIRefreshControl) {
+		refresh.endRefreshing()
+		self.reload()
 	}
+}
 
+//Navigation
+extension CliqzWebView {
+    
+    override func goBack() {
+        super.goBack()
+        self.canGoForward = true
+    }
+    
+    
+    override func goForward() {
+        super.goForward()
+        self.canGoBack = true
+    }
+    
+    func goToBackForwardListItem(item: LegacyBackForwardListItem) {
+        if let index = backForwardList.backList.index(of: item) {
+            let backCount = backForwardList.backList.count - index
+            for _ in 0..<backCount {
+                goBack()
+            }
+        } else if let index = backForwardList.forwardList.index(of: item) {
+            for _ in 0..<(index + 1) {
+                goForward()
+            }
+        }
+    }
+    
+    func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
+        ensureMainThread() {
+            let wrapped = "var result = \(javaScriptString); JSON.stringify(result)"
+            let evaluatedstring = self.stringByEvaluatingJavaScript(from: wrapped)
+            
+            var result: AnyObject?
+            if let dict = self.convertStringToDictionary(evaluatedstring) {
+                result = dict as AnyObject?
+            } else {
+                // in case the result was not dictionary, return the original response (reverse JSON stringify)
+                result = self.reverseStringify(evaluatedstring) as AnyObject?
+            }
+            completionHandler?(result, NSError(domain: NSURLErrorDomain, code: NSURLErrorCannotOpenFile, userInfo: nil))
+        }
+    }
+    
+    override func loadRequest(_ request: URLRequest) {
+        if let url = request.url,
+            !ReaderModeUtils.isReaderModeURL(url) {
+            unsafeRequests = 0
+        }
+        super.loadRequest(request)
+    }
+    
+    func loadingCompleted() {
+        if internalLoadingEndedFlag {
+            return
+        }
+        internalLoadingEndedFlag = true
+        
+        self.configuration.userContentController.injectJsIntoPage()
+        
+        guard let docLoc = self.stringByEvaluatingJavaScript(from: "document.location.href") else { return }
+        
+        if docLoc != self.prevDocumentLocation {
+            if !(self.url?.absoluteString.startsWith(WebServer.sharedInstance.base) ?? false) && !docLoc.startsWith(WebServer.sharedInstance.base) {
+                self.title = self.stringByEvaluatingJavaScript(from: "document.title") ?? Foundation.URL(string: docLoc)?.baseDomain() ?? ""
+            }
+            
+            if let nd = self.navigationDelegate {
+                globalContainerWebView.legacyWebView = self
+                nd.webView?(globalContainerWebView, didFinish: nullWKNavigation)
+            }
+        }
+        self.prevDocumentLocation = docLoc
+        
+        NotificationCenter.default.post(name: Notification.Name(rawValue: CliqzWebViewConstants.kNotificationWebViewLoadCompleteOrFailed), object: self)
+    }
+    
+    // On page load, the contentSize of the webview is updated (**). If the webview has not been notified of a page change (i.e. shouldStartLoadWithRequest was never called) then 'loading' will be false, and we should check the page location using JS.
+    // (** Not always updated, particularly on back/forward. For instance load duckduckgo.com, then google.com, and go back. No content size change detected.)
+    func contentSizeChangeDetected() {
+        if triggeredLocationCheckTimer.isValid {
+            return
+        }
+        
+        // Add a time delay so that multiple calls are aggregated
+        triggeredLocationCheckTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeoutCheckLocation), userInfo: nil, repeats: false)
+    }
+    
+    // Pushstate navigation may require this case (see brianbondy.com), as well as sites for which simple pushstate detection doesn't work:
+    // youtube and yahoo news are examples of this (http://stackoverflow.com/questions/24297929/javascript-to-listen-for-url-changes-in-youtube-html5-player)
+    @objc func timeoutCheckLocation() {
+        func shouldUpdateUrl(_ currentUrl: String, newLocation: String) -> Bool {
+            if newLocation == currentUrl || newLocation.contains("about:") || newLocation.contains("//localhost") || url?.host != Foundation.URL(string: newLocation)?.host {
+                return false
+            }
+            return true
+        }
+        
+        func tryUpdateUrl() {
+            guard let location = self.stringByEvaluatingJavaScript(from: "window.location.href"), let currentUrl = url?.absoluteString, shouldUpdateUrl(currentUrl, newLocation: location) else {
+                return
+            }
+            
+            setUrl(Foundation.URL(string: location), reliableSource: false)
+            
+            progress?.reset()
+        }
+        
+        DispatchQueue.main.async {
+            tryUpdateUrl()
+        }
+        
+    }
+}
+
+//Misc
+extension CliqzWebView {
+    
+    func reloadFromOrigin() {
+        self.reload()
+    }
+    
+    func updateUnsafeRequestsCount(_ newCount: Int) {
+        lockQueue.sync {
+            self.unsafeRequests = newCount
+        }
+    }
+}
+
+//String utilities
+extension CliqzWebView {
+    fileprivate func convertStringToDictionary(_ text: String?) -> [String:AnyObject]? {
+        if let data = text?.data(using: String.Encoding.utf8), text?.characters.count > 0 {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+                return json
+            } catch {
+                debugPrint("Something went wrong")
+            }
+        }
+        return nil
+    }
+    
     fileprivate func reverseStringify(_ text: String?) -> String? {
         guard text != nil else {
             return nil
@@ -448,20 +445,10 @@ class CliqzWebView: UIWebView {
             return text
         }
     }
-    fileprivate func updateObservableAttributes() {
-        
-        self.isLoading = super.isLoading
-        self.canGoBack = super.canGoBack
-        self.canGoForward = super.canGoForward
-    }
-    
-	@objc fileprivate func refreshWebView(_ refresh: UIRefreshControl) {
-		refresh.endRefreshing()
-		self.reload()
-	}
 }
 
 extension CliqzWebView: UIWebViewDelegate {
+    
 	class LegacyNavigationAction : WKNavigationAction {
 		var writableRequest: URLRequest
 		var writableType: WKNavigationType
@@ -478,6 +465,16 @@ extension CliqzWebView: UIWebViewDelegate {
 			get { return WKFrameInfo() }
 		}
 	}
+    
+    fileprivate class func isTopFrameRequest(_ request:URLRequest) -> Bool {
+        return request.url == request.mainDocumentURL
+    }
+    
+    fileprivate func updateObservableAttributes() {
+        self.isLoading = super.isLoading
+        self.canGoBack = super.canGoBack
+        self.canGoForward = super.canGoForward
+    }
 
 	func webView(_ webView: UIWebView,shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType ) -> Bool {
 		guard let url = request.url else { return false }
