@@ -9,7 +9,7 @@
 import UIKit
 import Shared
 import Storage
-import Crashlytics
+//import Crashlytics
 import Photos
 import Alamofire
 
@@ -503,7 +503,7 @@ extension CIBrowserViewController: WKNavigationDelegate {
 		if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
 			decisionHandler(WKNavigationActionPolicy.allow)
 			#if BETA
-				Answers.logCustomEvent(withName: "UnprivilegedURL", customAttributes: ["URL": url])
+				//Answers.logCustomEvent(withName: "UnprivilegedURL", customAttributes: ["URL": url])
 			#endif
 			return
 		}

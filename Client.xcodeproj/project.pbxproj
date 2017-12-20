@@ -133,8 +133,6 @@
 		1E79DD681D4FB4AF006BEB4A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79DD671D4FB4AF006BEB4A /* QuartzCore.framework */; };
 		1E79DD6A1D4FB4B7006BEB4A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79DD691D4FB4B7006BEB4A /* SystemConfiguration.framework */; };
 		1E79DD6C1D4FB4BA006BEB4A /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79DD6B1D4FB4BA006BEB4A /* VideoToolbox.framework */; };
-		1E79DD6F1D4FB4E7006BEB4A /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79DD6D1D4FB4E7006BEB4A /* Crashlytics.framework */; };
-		1E79DD701D4FB4E7006BEB4A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79DD6E1D4FB4E7006BEB4A /* Fabric.framework */; };
 		1E79DD741D4FB58D006BEB4A /* CliqzShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E79DD721D4FB58D006BEB4A /* CliqzShareItem.swift */; };
 		1E79DD751D4FB58D006BEB4A /* ExtendedBrowserHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E79DD731D4FB58D006BEB4A /* ExtendedBrowserHistory.swift */; };
 		1E79DD7C1D4FB59D006BEB4A /* BookmarksModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E79DD771D4FB59D006BEB4A /* BookmarksModelExtension.swift */; };
@@ -2083,8 +2081,6 @@
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
-				1E79DD6F1D4FB4E7006BEB4A /* Crashlytics.framework in Frameworks */,
-				1E79DD701D4FB4E7006BEB4A /* Fabric.framework in Frameworks */,
 				4FE4225D1DDB4C5A000A7D1C /* CRToast.framework in Frameworks */,
 				BACD89A94251835AA0CB4750 /* Pods_Client.framework in Frameworks */,
 			);

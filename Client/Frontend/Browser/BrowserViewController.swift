@@ -14,7 +14,7 @@ import Alamofire
 import ReadingList
 import MobileCoreServices
 import WebImage
-import Crashlytics
+//import Crashlytics
 import SwiftyJSON
 import CoreMotion
 
@@ -2730,7 +2730,7 @@ extension BrowserViewController: WKNavigationDelegate {
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.allow)
 #if BETA
-			Answers.logCustomEvent(withName: "UnprivilegedURL", customAttributes: ["URL": url])
+			//Answers.logCustomEvent(withName: "UnprivilegedURL", customAttributes: ["URL": url])
 #endif
             return
         }
@@ -4171,14 +4171,14 @@ extension BrowserViewController {
 
 
 
-extension BrowserViewController: CrashlyticsDelegate {
-    func crashlyticsDidDetectReport(forLastExecution report: CLSReport, completionHandler: @escaping (Bool) -> Void) {
-        hasPendingCrashReport = true
-		DispatchQueue.global(qos: .default).async {
-			completionHandler(true)
-		}
-    }
-}
+//extension BrowserViewController: CrashlyticsDelegate {
+//    func crashlyticsDidDetectReport(forLastExecution report: CLSReport, completionHandler: @escaping (Bool) -> Void) {
+//        hasPendingCrashReport = true
+//        DispatchQueue.global(qos: .default).async {
+//            completionHandler(true)
+//        }
+//    }
+//}
 
 
 //Conv Interface

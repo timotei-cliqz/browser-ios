@@ -7,8 +7,8 @@ import Storage
 import AVFoundation
 import XCGLogger
 import MessageUI
-import Fabric
-import Crashlytics
+//import Fabric
+//import Crashlytics
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
@@ -313,8 +313,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 
         // Cliqz: Start Crashlytics
-        Crashlytics.sharedInstance().delegate = self
-        Fabric.with([Crashlytics.self])
+//        Crashlytics.sharedInstance().delegate = self
+//        Fabric.with([Crashlytics.self])
 
         
         // Cliqz: Added Lookback integration
@@ -764,10 +764,11 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension AppDelegate: CrashlyticsDelegate {
-    func crashlyticsDidDetectReport(forLastExecution report: CLSReport, completionHandler: @escaping (Bool) -> Void) {
-        DispatchQueue.global(qos: .default).async {
-            completionHandler(true)
-        }
-    }
-}
+//extension AppDelegate: CrashlyticsDelegate {
+//    func crashlyticsDidDetectReport(forLastExecution report: CLSReport, completionHandler: @escaping (Bool) -> Void) {
+//        DispatchQueue.global(qos: .default).async {
+//            completionHandler(true)
+//        }
+//    }
+//}
+

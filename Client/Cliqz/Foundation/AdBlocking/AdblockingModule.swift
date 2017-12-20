@@ -8,7 +8,7 @@
 
 import Foundation
 import JavaScriptCore
-import Crashlytics
+//import Crashlytics
 
 class AdblockingModule: NSObject {
 

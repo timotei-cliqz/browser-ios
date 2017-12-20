@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Crashlytics
+//import Crashlytics
 
 class EventsLogger: NSObject {
     
@@ -94,10 +94,10 @@ class EventsLogger: NSObject {
                 let eventsData = try JSONSerialization.data(withJSONObject: eventsContents, options: [])
                 LocalDataStore.setObject(eventsData, forKey: self.telemetryeventsKey)
             } else {
-                Answers.logCustomEvent(withName: "SerializeInvalidTelemetrySignal", customAttributes: nil)
+                //Answers.logCustomEvent(withName: "SerializeInvalidTelemetrySignal", customAttributes: nil)
             }
         } catch let error as NSError {
-            Answers.logCustomEvent(withName: "SerializeTelemetryError", customAttributes: ["error": error.localizedDescription])
+            //Answers.logCustomEvent(withName: "SerializeTelemetryError", customAttributes: ["error": error.localizedDescription])
         }
         
     }
@@ -113,7 +113,7 @@ class EventsLogger: NSObject {
                 self.events.appendContentsOf(events)
             }
         } catch let error as NSError {
-            Answers.logCustomEvent(withName: "DeserializeTelemetryError", customAttributes: ["error": error.localizedDescription])
+            //Answers.logCustomEvent(withName: "DeserializeTelemetryError", customAttributes: ["error": error.localizedDescription])
         }
     }
     

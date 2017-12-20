@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Crashlytics
+//import Crashlytics
 
 class LocalDataStore {
     static let defaults = UserDefaults.standard

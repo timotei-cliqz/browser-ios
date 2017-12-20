@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Crashlytics
+//import Crashlytics
 
 class AppStatus {
 
@@ -251,7 +251,7 @@ class AppStatus {
                 let stringifiedAbTests = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
                 prefs["ABTests"]   = stringifiedAbTests
             } catch let error as NSError {
-                Answers.logCustomEvent(withName: "stringifyABTests", customAttributes: ["error": error.localizedDescription])
+                //Answers.logCustomEvent(withName: "stringifyABTests", customAttributes: ["error": error.localizedDescription])
             }
         }
         
