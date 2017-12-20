@@ -546,7 +546,11 @@ extension CliqzWebView: UIWebViewDelegate {
 			title = t
 		}
 		progress?.webViewDidFinishLoad(readyState)
-//		self.webViewDelegate?.didFinishLoadingRequest(request: nil)
+		//self.webViewDelegate?.didFinishLoadingRequest(request: nil)
+        if let nd = self.navigationDelegate {
+            globalContainerWebView.legacyWebView = self
+            nd.webView?(globalContainerWebView, didFinish: nullWKNavigation)
+        }
         updateObservableAttributes()
         
 	}
@@ -576,6 +580,10 @@ extension CliqzWebView: UIWebViewDelegate {
             .post(name: Notification.Name(rawValue: CliqzWebViewConstants.kNotificationWebViewLoadCompleteOrFailed), object: self)
         
 		progress?.didFailLoadWithError()
+        if let nd = self.navigationDelegate {
+            globalContainerWebView.legacyWebView = self
+            nd.webView?(globalContainerWebView, didFail: nullWKNavigation, withError: error)
+        }
         updateObservableAttributes()
 	}
 
