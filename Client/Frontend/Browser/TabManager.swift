@@ -815,6 +815,7 @@ extension TabManager : WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
         let tab = self[webView]
         tab?.setNoImageMode(isNoImageMode, force: false)
