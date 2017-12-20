@@ -1061,7 +1061,7 @@ class BrowserViewController: UIViewController {
         if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
             return true
-        } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
+        } else if let selectedTab = tabManager.selectedTab/*, selectedTab.canGoBack*/ {
             // Cliqz: use one entry to go back/forward in all code
             self.goBack()
             return true
@@ -2574,8 +2574,8 @@ extension BrowserViewController: TabManagerDelegate {
         updateFindInPageVisibility(visible: false)
 
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
-        navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
-        navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
+        //navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
+        //navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
 
         if let readerMode = selected?.getHelper(ReaderMode.name()) as? ReaderMode {
@@ -2909,9 +2909,9 @@ extension BrowserViewController: WKNavigationDelegate {
         saveLastVisitedWebSite()
         
         // Remember whether or not a desktop site was requested
-        if #available(iOS 9.0, *) {
-            tab.desktopSite = webView.customUserAgent?.isEmpty == false
-        }
+//        if #available(iOS 9.0, *) {
+//            tab.desktopSite = webView.customUserAgent?.isEmpty == false
+//        }
         
         //Cliqz: store changes of tabs 
         if let url = tab.url {
@@ -4031,12 +4031,12 @@ extension BrowserViewController {
     
     // Cliqz: Added method to show search view if needed
     fileprivate func switchToSearchModeIfNeeded() {
-        if let selectedTab = self.tabManager.selectedTab {
-            if (selectedTab.inSearchMode) {
-                self.urlBar.enterOverlayMode("", pasted: true)
-                scrollController.showToolbars(false)
-            }
-        }
+//        if let selectedTab = self.tabManager.selectedTab {
+//            if (selectedTab.inSearchMode) {
+//                self.urlBar.enterOverlayMode("", pasted: true)
+//                scrollController.showToolbars(false)
+//            }
+//        }
     }
     
     // Cliqz: Logging the Navigation Telemetry signals
