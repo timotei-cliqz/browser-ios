@@ -28,7 +28,7 @@ final class DomainDetailsViewController: UIViewController {
     //scroll
     var finger_on_screen: Bool = true
     var prev_offset: CGFloat = 0.0
-    //var animating: Bool = false
+    var animating: Bool = false
     
     //
     var shouldScrollToBottom = false
@@ -85,7 +85,6 @@ final class DomainDetailsViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debugPrint("scroll size = \(historyTableView.contentSize.height)")
         let offset = historyTableView.contentSize.height - historyTableView.frame.height
         if shouldScrollToBottom && offset > 0 {
             shouldScrollToBottom = false
@@ -193,6 +192,8 @@ extension DomainDetailsViewController {
     @objc
     func panHappened(_ pan: UIPanGestureRecognizer) {
         
+        guard animating == false else { return }
+        
         let translation = pan.translation(in: historyTableView)
         let velocity = pan.velocity(in: historyTableView)
         let offset = -(translation.y - prev_offset)
@@ -223,10 +224,13 @@ extension DomainDetailsViewController {
                 self.recommendationsCollection.adjustOpacity()
                 self.recommendationsCollection.adjustConstraints(offset: offset)
             } else {
+                animating = true
                 UIView.animate(withDuration: time, animations: {
                     self.recommendationsCollection.collapse()
                     self.view.layoutIfNeeded()
-                })
+                }) { finished in
+                    self.animating = !finished
+                }
             }
         }
         
@@ -238,7 +242,9 @@ extension DomainDetailsViewController {
             UIView.animate(withDuration: time, animations: {
                 self.recommendationsCollection.finishTransition()
                 self.view.layoutIfNeeded()
-            })
+            }) { finished in
+                self.animating = !finished
+            }
         }
     }
 }
