@@ -239,6 +239,7 @@ class Tab: NSObject {
             configuration = nil
             
             //Delegates
+            //Who is the navigation delegate for the Tab in this case
             webView.navigationDelegate = navigationDelegate
             webView.webViewDelegate = self
 #if CLIQZ
@@ -494,9 +495,9 @@ extension Tab: CliqzWebViewDelegate {
     func didFinishLoadingRequest(request: NSURLRequest?) {
         //finished loading request
         self.url = request?.url
-		if let urlString = self.url?.absoluteString {
-			//self.navigateToState(.web(urlString))
-		}
+//        if let urlString = self.url?.absoluteString {
+//            //self.navigateToState(.web(urlString))
+//        }
         self.tabDelegate?.urlChangedForTab?(self)
     }
 }

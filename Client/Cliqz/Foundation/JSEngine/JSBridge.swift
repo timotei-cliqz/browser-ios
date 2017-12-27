@@ -93,7 +93,7 @@ open class JSBridge : RCTEventEmitter {
         // after signal the reply should be ready in the cache
         semaphoresDispatchQueue.sync {
             if timeout == .timedOut {
-                print("action timeout \(actionId), \(functionName)")
+                debugPrint("action timeout \(actionId), \(functionName)")
                 self.replyCache[actionId] = ["error": "timeout"]
             }
             reply = self.replyCache[actionId]!

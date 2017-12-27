@@ -44,7 +44,7 @@ open class WebRequest : RCTEventEmitter {
         
         let response = Engine.sharedInstance.getBridge().callAction("webRequest", args: [requestInfo])
         if let blockResponse = response["result"] as? NSDictionary, blockResponse["cancel"] != nil {
-            print("xxxxx -> block \(String(describing: request.url))")
+            debugPrint("xxxxx -> block \(String(describing: request.url))")
             // update unsafe requests count for the webivew that issued this request
             if let tabId = requestInfo["tabId"] as? Int, let webView = WebViewToUAMapper.idToWebView(tabId),
                 let _ = blockResponse["source"] {

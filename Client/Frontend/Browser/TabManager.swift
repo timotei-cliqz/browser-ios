@@ -122,6 +122,22 @@ class TabManager : NSObject {
             return []
         }
     }
+    
+    var selectedTab: Tab? {
+        assert(Thread.isMainThread)
+        
+        if !(0..<count ~= _selectedIndex) {
+            return nil
+        }
+        
+        return tabs[_selectedIndex]
+    }
+    
+    var count: Int {
+        assert(Thread.isMainThread)
+        
+        return tabs.count
+    }
 
     init(prefs: Prefs, imageStore: DiskImageStore?) {
         assert(Thread.isMainThread)
@@ -130,8 +146,10 @@ class TabManager : NSObject {
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
         super.init()
-
-        addNavigationDelegate(self)
+        
+        //otherwise: reference cycle = self -> TabManagerNavDelegate -> delegates -> self
+        weak var weak_Self: TabManager? = self
+        addNavigationDelegate(weak_Self!)
 
         NotificationCenter.default.addObserver(self, selector: #selector(TabManager.prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
@@ -144,22 +162,6 @@ class TabManager : NSObject {
         assert(Thread.isMainThread)
 
         self.navDelegate.insert(delegate)
-    }
-
-    var count: Int {
-        assert(Thread.isMainThread)
-
-        return tabs.count
-    }
-    
-    var selectedTab: Tab? {
-        assert(Thread.isMainThread)
-
-        if !(0..<count ~= _selectedIndex) {
-            return nil
-        }
-
-        return tabs[_selectedIndex]
     }
 
     subscript(index: Int) -> Tab? {
@@ -690,7 +692,7 @@ extension TabManager {
                     self.preserveTabsInternal()
                 })
             }) { (exception) -> Void in
-            print("Failed to preserve tabs: \(exception)")
+                print("Failed to preserve tabs: \(String(describing: exception))")
         }
     }
 
