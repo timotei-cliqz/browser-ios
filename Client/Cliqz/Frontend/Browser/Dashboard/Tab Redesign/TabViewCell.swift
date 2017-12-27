@@ -251,13 +251,7 @@ class TabViewCell: UICollectionViewCell {
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
-        
-        if let attr = layoutAttributes as? TabSwitcherLayoutAttributes {
-            displayView.layer.transform = attr.displayTransform
-            self.layer.zPosition = self.frame.origin.y
-            currentTransform = attr.displayTransform
-        }
-        
+        self.layer.zPosition = self.frame.origin.y
     }
     
     override func willTransition(from oldLayout: UICollectionViewLayout, to newLayout: UICollectionViewLayout) {

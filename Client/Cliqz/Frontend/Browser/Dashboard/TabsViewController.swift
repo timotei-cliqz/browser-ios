@@ -295,6 +295,24 @@ extension TabsViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        func computeTransform(count:Int) -> CATransform3D {
+            
+            var t: CATransform3D = CATransform3DIdentity
+            
+            t.m34 = -1.0 / (CGFloat(1000))
+            t = CATransform3DRotate(t, -CGFloat(Knobs.tiltAngle(count: count)), 1, 0, 0)
+            
+            //calculate how much down t will take the layer and then compensate for that.
+            //this view must have the dimensions of the view this attr is going to be applied to.
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: Knobs.cellWidth(), height: Knobs.cellHeight()))
+            view.layer.transform = t
+            
+            t = CATransform3DTranslate(t, 0, -view.layer.frame.origin.y, 0)
+            
+            return t
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TabViewCell
         
         cell.tag = indexPath.row
@@ -370,9 +388,12 @@ extension TabsViewController: UICollectionViewDataSource {
             cell.setBigLogo(image: UIImage(named: "cliqzTabLogo"), cliqzLogo: true)
         }
         
+        cell.displayView.layer.transform = computeTransform(count: self.tabManager.nonEmptyTabs.count)
+        
         cell.accessibilityLabel = tab.displayURL?.absoluteString
         return cell
     }
+
 }
 
 
