@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
-    var adjustIntegration: AdjustIntegration?
+    //var adjustIntegration: AdjustIntegration?
     var foregroundStartTime = 0
 
     weak var application: UIApplication?
@@ -213,7 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            viewURLInNewTab(localNotification)
 //        }
         
-        adjustIntegration = AdjustIntegration(profile: profile)
+        //adjustIntegration = AdjustIntegration(profile: profile)
 
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
@@ -295,7 +295,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Did finish launching.")
         
         log.debug("Setting up Adjust")
-        self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        //self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
